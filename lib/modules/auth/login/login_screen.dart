@@ -52,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
           top: 280,
           left: 30,
           right: 30,
-
           child: Column(
             children: [
               CustomTextField(label: 'Email', hintText: 'Enter email'),
@@ -62,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: 'Enter Password',
                 obscureText: true,
               ),
+              TextField(),
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
@@ -88,9 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
                         );
                       },
                     ),
