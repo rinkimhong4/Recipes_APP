@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen.dart';
+import 'package:recipe_app/modules/auth/login/login_screen.dart';
+import 'package:recipe_app/widget/button_custom.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,24 +15,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        // Use Stack to layer widgets
         children: [
-          // Background Image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                  'https://wallpapers.com/images/hd/android-food-background-2160-x-3840-syqu229ro3tr8nt9.jpg',
-                ),
+                image: AssetImage('assets/images/BGSplashScreen.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Gradient Overlay
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.black45, Colors.black87],
+                colors: [Colors.black26, Colors.black87],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -62,18 +58,18 @@ class _SplashScreenState extends State<SplashScreen> {
                   style: AppTextStyle.poppinsNormalRegular(),
                 ),
                 SizedBox(height: 60),
-                _buildNavButton(
+                NavButton(
                   context,
                   label: 'Start Cooking',
-                  icon: Icons.arrow_forward_ios,
+                  icon: Icons.chevron_right,
                   width: 250,
-                  height: 60,
+                  height: 54,
                   textStyle: AppTextStyle.poppinsNormalBold(),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
                   },
@@ -82,42 +78,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavButton(
-    BuildContext context, {
-    required String label,
-    IconData? icon,
-    VoidCallback? onPressed,
-    double? width,
-    double? height,
-    TextStyle? textStyle,
-  }) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
-          foregroundColor: AppColors.neutral[100],
-          textStyle: textStyle ?? AppTextStyle.poppinsSmallRegular(),
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(label),
-            const SizedBox(width: 9),
-            Icon(icon, color: AppColors.neutral[100], size: 24),
-          ],
-        ),
       ),
     );
   }

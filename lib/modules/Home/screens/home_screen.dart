@@ -7,6 +7,8 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(child: Text("Home Page", style: TextStyle(fontSize: 50))),
+    );
   }
 }
