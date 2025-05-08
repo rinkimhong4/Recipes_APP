@@ -37,11 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Text(
                 "Hello,",
-                style: AppTextStyle.poppinsHeaderBold(color: AppColors.neutral),
+                style: AppTextStyle.poppinsHeaderBold30(
+                  color: AppColors.neutral,
+                ),
               ),
               Text(
                 "Welcome Back!",
-                style: AppTextStyle.poppinsLargeRegular(
+                style: AppTextStyle.poppinsLargeRegular20(
                   color: AppColors.neutral,
                 ),
               ),
@@ -61,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: 'Enter Password',
                 obscureText: true,
               ),
-              TextField(),
+
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
@@ -72,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {},
                       child: Text(
                         'forgot password',
-                        style: AppTextStyle.poppinsSmallRegular(
+                        style: AppTextStyle.poppinsSmallRegular14(
                           color: AppColors.ratingColor,
                         ),
                       ),
@@ -84,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       icon: Icons.chevron_right,
                       width: 400,
                       height: 60,
-                      textStyle: AppTextStyle.poppinsSmallBold(),
+                      textStyle: AppTextStyle.poppinsSmallBold14(),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -105,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Text(
                     "Don't have an account",
-                    style: AppTextStyle.poppinsSmallerBold(
+                    style: AppTextStyle.poppinsSmallerBold11(
                       color: AppColors.neutral,
                     ),
                   ),
@@ -121,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       'sign up',
-                      style: AppTextStyle.poppinsSmallerBold(
+                      style: AppTextStyle.poppinsSmallerBold11(
                         color: AppColors.ratingColor,
                       ),
                     ),
@@ -148,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Or Sign in With",
-            style: AppTextStyle.poppinsSmallRegular(
+            style: AppTextStyle.poppinsSmallRegular14(
               color: AppColors.neutral.withValues(alpha: 0.5),
             ),
           ),

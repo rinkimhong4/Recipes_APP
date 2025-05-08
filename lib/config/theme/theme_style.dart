@@ -55,55 +55,55 @@ class AppTextStyle {
   static const String _fontFamily = 'Poppins';
 
   // --- Poppins Bold ---
-  static TextStyle poppinsTitleBoldBig({Color? color}) => TextStyle(
+  static TextStyle poppinsTitleBoldBig50({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 50,
     color: color ?? AppColors.neutral[100],
   );
-  static TextStyle poppinsTitleBold({Color? color}) => TextStyle(
+  static TextStyle poppinsTitleBold48({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 48,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsHeaderBold({Color? color}) => TextStyle(
+  static TextStyle poppinsHeaderBold30({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 30,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsLargeBold({Color? color}) => TextStyle(
+  static TextStyle poppinsLargeBold20({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 20,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsMediumBold({Color? color}) => TextStyle(
+  static TextStyle poppinsMediumBold18({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 18,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsNormalBold({Color? color}) => TextStyle(
+  static TextStyle poppinsNormalBold16({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 16,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsSmallBold({Color? color}) => TextStyle(
+  static TextStyle poppinsSmallBold14({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 14,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsSmallerBold({Color? color}) => TextStyle(
+  static TextStyle poppinsSmallerBold11({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.bold,
     fontSize: 11,
@@ -111,49 +111,49 @@ class AppTextStyle {
   );
 
   // --- Poppins Regular ---
-  static TextStyle poppinsTitleRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsTitleRegular50({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 50,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsHeaderRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsHeaderRegular30({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 30,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsLargeRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsLargeRegular20({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 20,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsMediumRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsMediumRegular18({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 18,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsNormalRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsNormalRegular16({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 16,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsSmallRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsSmallRegular14({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 14,
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsSmallerRegular({Color? color}) => TextStyle(
+  static TextStyle poppinsSmallerRegular11({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 11,

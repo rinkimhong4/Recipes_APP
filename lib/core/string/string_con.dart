@@ -2,3 +2,4 @@
 
 String URL = 'https://dummyjson.com';
 String PRODUCT = '/product/';
+String RECIPE = '/recipes/';

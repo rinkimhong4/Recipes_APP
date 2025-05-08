@@ -24,7 +24,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyle.poppinsSmallRegular(color: AppColors.neutral),
+          style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
         ),
         const SizedBox(height: 7),
         TextField(
@@ -32,7 +32,7 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: AppTextStyle.poppinsSmallerRegular(
+            hintStyle: AppTextStyle.poppinsSmallerRegular11(
               color: AppColors.neutral.withValues(alpha: 0.5),
             ),
             prefixIcon:

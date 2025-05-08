@@ -47,15 +47,15 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(height: 14),
                 Text(
                   '100K+ Premium Recipe ',
-                  style: AppTextStyle.poppinsLargeRegular(),
+                  style: AppTextStyle.poppinsLargeRegular20(),
                 ),
                 SizedBox(height: 222),
-                Text('Get ', style: AppTextStyle.poppinsTitleBoldBig()),
-                Text('Cooking', style: AppTextStyle.poppinsTitleBoldBig()),
+                Text('Get ', style: AppTextStyle.poppinsTitleBoldBig50()),
+                Text('Cooking', style: AppTextStyle.poppinsTitleBoldBig50()),
                 SizedBox(height: 20),
                 Text(
                   'Simple way to find Tasty Recipe',
-                  style: AppTextStyle.poppinsNormalRegular(),
+                  style: AppTextStyle.poppinsNormalRegular16(),
                 ),
                 SizedBox(height: 60),
                 NavButton(
@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   icon: Icons.chevron_right,
                   width: 250,
                   height: 54,
-                  textStyle: AppTextStyle.poppinsNormalBold(),
+                  textStyle: AppTextStyle.poppinsNormalBold16(),
                   onPressed: () {
                     Navigator.push(
                       context,

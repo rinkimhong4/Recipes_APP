@@ -1,26 +1,35 @@
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:recipe_app/core/services/api_service.dart';
 import 'package:recipe_app/core/string/string_con.dart';
-import 'package:recipe_app/modules/Home/models/product_models.dart';
+import 'package:recipe_app/modules/Home/models/recipe_models.dart';
 
 class HomeController extends GetxController {
   ApiService get apiService => ApiService(baseUrl: URL);
   RxBool isLoading = true.obs;
-
-  ProductModels productModels = ProductModels();
-  Future<void> loadingApiData() async {
+  //
+  RecipeModels recipeModels = RecipeModels();
+  Future<void> loadingRecipe() async {
     isLoading.value = true;
-
-    productModels = await apiService.callApi<ProductModels>(
-      endpoint: PRODUCT,
+    recipeModels = await apiService.callApi<RecipeModels>(
+      endpoint: RECIPE,
       body: {},
-      fromJson: (data) => ProductModels.fromJson(data),
+      fromJson: (data) => RecipeModels.fromJson(data),
     );
-
-    SmartDialog.dismiss();
     isLoading.value = false;
   }
+
+  // //
+  // ProductModels productModels = ProductModels();
+  // Future<void> loadingApiData() async {
+  //   isLoading.value = true;
+  //   productModels = await apiService.callApi<ProductModels>(
+  //     endpoint: PRODUCT,
+  //     body: {},
+  //     fromJson: (data) => ProductModels.fromJson(data),
+  //   );
+  //   SmartDialog.dismiss();
+  //   isLoading.value = false;
+  // }
 
   // await apiService.callApi<ProductModels>(
   //       endpoint: '/product/',
@@ -35,6 +44,7 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    await loadingApiData();
+    // await loadingApiData();
+    await loadingRecipe();
   }
 }

@@ -38,14 +38,16 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               Text(
                 "Create an account",
-                style: AppTextStyle.poppinsLargeBold(color: AppColors.neutral),
+                style: AppTextStyle.poppinsLargeBold20(
+                  color: AppColors.neutral,
+                ),
               ),
               SizedBox(height: 7),
               SizedBox(
                 width: 200,
                 child: Text(
                   "Let's help you set up your account, it won't take long.",
-                  style: AppTextStyle.poppinsSmallerRegular(
+                  style: AppTextStyle.poppinsSmallerRegular11(
                     color: AppColors.neutral,
                   ),
                 ),
@@ -104,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           child: Text(
                             'Accept terms & Condition',
-                            style: AppTextStyle.poppinsSmallerRegular(
+                            style: AppTextStyle.poppinsSmallerRegular11(
                               color: AppColors.ratingColor,
                             ),
                           ),
@@ -118,7 +120,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       icon: Icons.chevron_right,
                       width: 400,
                       height: 60,
-                      textStyle: AppTextStyle.poppinsSmallBold(),
+                      textStyle: AppTextStyle.poppinsSmallBold14(),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -139,7 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Text(
                     "Don't have an account",
-                    style: AppTextStyle.poppinsSmallerBold(
+                    style: AppTextStyle.poppinsSmallerBold11(
                       color: AppColors.neutral,
                     ),
                   ),
@@ -155,7 +157,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                     child: Text(
                       'sign in',
-                      style: AppTextStyle.poppinsSmallerBold(
+                      style: AppTextStyle.poppinsSmallerBold11(
                         color: AppColors.ratingColor,
                       ),
                     ),
@@ -182,7 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Or Sign in With",
-            style: AppTextStyle.poppinsSmallRegular(
+            style: AppTextStyle.poppinsSmallRegular14(
               color: AppColors.neutral.withValues(alpha: 0.5),
             ),
           ),

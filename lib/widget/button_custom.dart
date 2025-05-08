@@ -29,7 +29,7 @@ class NavButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
           foregroundColor: AppColors.neutral[100],
-          textStyle: textStyle ?? AppTextStyle.poppinsSmallRegular(),
+          textStyle: textStyle ?? AppTextStyle.poppinsSmallRegular14(),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
