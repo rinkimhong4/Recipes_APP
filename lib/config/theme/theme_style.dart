@@ -153,6 +153,13 @@ class AppTextStyle {
     color: color ?? AppColors.neutral[100],
   );
 
+  static TextStyle poppinsSmallRegular12({Color? color}) => TextStyle(
+    fontFamily: _fontFamily,
+    fontWeight: FontWeight.normal,
+    fontSize: 12,
+    color: color ?? AppColors.neutral[100],
+  );
+
   static TextStyle poppinsSmallerRegular11({Color? color}) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,

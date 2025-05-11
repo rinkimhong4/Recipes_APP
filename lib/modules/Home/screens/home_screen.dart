@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/controller/home_controller.dart';
 import 'package:recipe_app/modules/Home/models/recipe_models.dart';
-import 'package:recipe_app/modules/Home/widgets/card.dart';
+import 'package:recipe_app/modules/Home/widgets/card_home_screen.dart';
 import 'package:recipe_app/modules/item/item_detail.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -39,7 +39,7 @@ class HomeScreen extends GetView<HomeController> {
       body: Obx(
         () =>
             controller.isLoading.value
-                ? Center(child: CircularProgressIndicator())
+                ? SizedBox.square()
                 : TabBarView(
                   children:
                       tabTitles.map((category) {
@@ -116,10 +116,11 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      //
+                    },
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),

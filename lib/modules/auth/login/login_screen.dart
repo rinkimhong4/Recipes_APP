@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen.dart';
+import 'package:recipe_app/modules/Home/screens/bottom_tab_screen.dart';
 import 'package:recipe_app/modules/auth/signup/signup.dart';
 import 'package:recipe_app/modules/auth/widget/socialloginbuttons.dart';
 import 'package:recipe_app/widget/button_custom.dart';
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => Home()),
                         );
                       },
                     ),
@@ -116,9 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => SignupScreen()),
                       );
                     },
                     child: Text(
