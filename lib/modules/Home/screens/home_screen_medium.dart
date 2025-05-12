@@ -90,10 +90,10 @@ class HomeScreenMedium extends GetView<HomeController> {
             ),
             SizedBox(height: 30),
             Container(
-              height: 60,
+              height: 64,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
               ),
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
@@ -143,7 +143,7 @@ class HomeScreenMedium extends GetView<HomeController> {
           isScrollable: true,
           indicator: BoxDecoration(
             color: AppColors.primaryColor,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(14),
           ),
           labelColor: Colors.white,
           unselectedLabelColor: AppColors.primaryColor[500],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
+import 'package:recipe_app/modules/Home/screens/page_controller.dart';
 import 'package:recipe_app/modules/auth/login/login_screen.dart';
 import 'package:recipe_app/modules/auth/widget/socialloginbuttons.dart';
 import 'package:recipe_app/widget/button_custom.dart';
@@ -97,7 +97,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             });
                           },
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 4),
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -113,24 +113,24 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 26),
-                    NavButton(
-                      context,
-                      label: 'Sign in',
-                      icon: Icons.chevron_right,
-                      width: 400,
-                      height: 60,
-                      textStyle: AppTextStyle.poppinsSmallBold14(),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreenSmall(),
-                          ),
-                        );
-                      },
-                    ),
                     SizedBox(height: 14),
+                    Center(
+                      child: NavButton(
+                        context,
+                        label: 'Sign in',
+                        icon: Icons.chevron_right,
+                        width: 400,
+                        height: 60,
+                        textStyle: AppTextStyle.poppinsSmallBold14(),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     _buildOrDivider(),
                     SizedBox(height: 20),
                     SocialLoginButtons(),
@@ -141,10 +141,13 @@ class _SignupScreenState extends State<SignupScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Don't have an account",
-                    style: AppTextStyle.poppinsSmallerBold11(
-                      color: AppColors.neutral,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 23),
+                    child: Text(
+                      "Don't have an account",
+                      style: AppTextStyle.poppinsSmallerBold11(
+                        color: AppColors.neutral,
+                      ),
                     ),
                   ),
                   SizedBox(width: 4),

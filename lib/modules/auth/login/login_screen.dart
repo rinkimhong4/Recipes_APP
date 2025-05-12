@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
               ),
 
-              SizedBox(height: 20),
+              SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -79,20 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 25),
-                    NavButton(
-                      context,
-                      label: 'Sign in',
-                      icon: Icons.chevron_right,
-                      width: 400,
-                      height: 60,
-                      textStyle: AppTextStyle.poppinsSmallBold14(),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()),
-                        );
-                      },
+                    SizedBox(height: 14),
+                    Center(
+                      child: NavButton(
+                        context,
+                        label: 'Sign in',
+                        icon: Icons.chevron_right,
+                        width: 400,
+                        height: 60,
+                        textStyle: AppTextStyle.poppinsSmallBold14(),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                          );
+                        },
+                      ),
                     ),
                     SizedBox(height: 20),
                     _buildOrDivider(),
@@ -101,9 +103,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 55),
+              SizedBox(height: 35),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Don't have an account",

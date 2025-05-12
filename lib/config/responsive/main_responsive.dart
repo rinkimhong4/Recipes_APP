@@ -36,7 +36,7 @@ class MainResponsive extends StatelessWidget {
     );
   }
 }
-
+/* ==================== */
 // class MainResponsive extends StatefulWidget {
 //   final Widget? small;
 //   final Widget? medium;

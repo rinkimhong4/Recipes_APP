@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:shimmer/shimmer.dart';
@@ -29,7 +30,7 @@ class _RecipeCardState extends State<RecipeCard> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 400), () {
+    Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         isLoading = false;
       });
@@ -37,14 +38,26 @@ class _RecipeCardState extends State<RecipeCard> {
   }
 
   Widget _buildImage() {
-    return widget.image.startsWith('data:image')
-        ? Image.memory(
-          base64Decode(widget.image.split(',').last),
-          fit: BoxFit.cover,
-        )
-        : _isNetworkImage
-        ? Image.network(widget.image, fit: BoxFit.cover)
-        : Image.asset(widget.image, fit: BoxFit.cover);
+    if (widget.image.startsWith('data:image')) {
+      return Image.memory(
+        base64Decode(widget.image.split(',').last),
+        fit: BoxFit.cover,
+      );
+    } else if (_isNetworkImage) {
+      return CachedNetworkImage(
+        imageUrl: widget.image,
+        fit: BoxFit.cover,
+        placeholder:
+            (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(color: Colors.grey.shade300),
+            ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
+    } else {
+      return Image.asset(widget.image, fit: BoxFit.cover);
+    }
   }
 
   @override

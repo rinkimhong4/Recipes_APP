@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:shimmer/shimmer.dart';
@@ -18,7 +19,7 @@ class _BookmarkCardState extends State<BookmarkCard> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 600), () {
+    Future.delayed(const Duration(milliseconds: 250), () {
       setState(() {
         isLoading = false;
       });
@@ -79,14 +80,22 @@ class _BookmarkCardState extends State<BookmarkCard> {
         ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
           child: SizedBox(
-            height: 160,
+            height: 380,
+            width: double.infinity,
             child: PageView.builder(
-              itemCount: 2,
+              itemCount: 1,
               itemBuilder:
-                  (context, index) => Image.network(
-                    recipe.image ?? '',
+                  (context, index) => CachedNetworkImage(
+                    imageUrl: recipe.image ?? '',
                     fit: BoxFit.cover,
                     width: double.infinity,
+                    placeholder:
+                        (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(color: Colors.grey.shade300),
+                        ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
             ),
           ),

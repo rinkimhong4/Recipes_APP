@@ -90,10 +90,10 @@ class HomeScreenSmall extends GetView<HomeController> {
             ),
             SizedBox(height: 30),
             Container(
-              height: 60,
+              height: 64,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
               ),
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
@@ -123,7 +123,7 @@ class HomeScreenSmall extends GetView<HomeController> {
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(Icons.tune, size: 24),
                     ),
@@ -143,7 +143,7 @@ class HomeScreenSmall extends GetView<HomeController> {
           isScrollable: true,
           indicator: BoxDecoration(
             color: AppColors.primaryColor,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(14),
           ),
           labelColor: Colors.white,
           unselectedLabelColor: AppColors.primaryColor[500],

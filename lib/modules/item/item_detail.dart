@@ -16,7 +16,7 @@ class _ItemDetailState extends State<ItemDetail> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 700), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         _isLoading = false;
       });
@@ -26,11 +26,17 @@ class _ItemDetailState extends State<ItemDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.recipe.name ?? 'Recipe Detail')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: _isLoading ? _buildShimmer(context) : _buildRecipeDetail(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(widget.recipe.name ?? 'Recipe Detail'),
+      ),
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: _isLoading ? _buildShimmer(context) : _buildRecipeDetail(),
+          ),
         ),
       ),
     );

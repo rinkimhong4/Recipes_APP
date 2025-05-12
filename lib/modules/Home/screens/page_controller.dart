@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/function/responsive/main_responsive.dart';
-import 'package:recipe_app/modules/Home/screens/bookmark_screen.dart';
+import 'package:recipe_app/modules/Home/screens/save_recipe_screen_medium.dart';
+import 'package:recipe_app/modules/Home/screens/save_recipe_screen_small.dart';
 import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
 import 'package:recipe_app/modules/Home/screens/home_screen_medium.dart'; // 👈 Add this
 import 'package:recipe_app/widget/bottom_navigation.dart';
@@ -21,7 +22,11 @@ class _HomeState extends State<Home> {
     super.initState();
     _listPages.addAll([
       MainResponsive(small: HomeScreenSmall(), medium: HomeScreenMedium()),
-      const BookmarkScreen(),
+      MainResponsive(
+        small: SaveRecipeScreenSmall(),
+        medium: SaveRecipeScreenMedium(),
+      ),
+
       const Center(child: Text('Notifications')),
       const Center(child: Text('Profile')),
     ]);
