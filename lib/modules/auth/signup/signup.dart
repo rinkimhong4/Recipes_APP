@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen.dart';
+import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
 import 'package:recipe_app/modules/auth/login/login_screen.dart';
 import 'package:recipe_app/modules/auth/widget/socialloginbuttons.dart';
 import 'package:recipe_app/widget/button_custom.dart';
@@ -124,7 +124,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreenSmall(),
+                          ),
                         );
                       },
                     ),

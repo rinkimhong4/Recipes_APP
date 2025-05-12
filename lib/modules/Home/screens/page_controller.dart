@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/config/function/responsive/main_responsive.dart';
 import 'package:recipe_app/modules/Home/screens/bookmark_screen.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen.dart';
+import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
+import 'package:recipe_app/modules/Home/screens/home_screen_medium.dart'; // 👈 Add this
 import 'package:recipe_app/widget/bottom_navigation.dart';
 
 class Home extends StatefulWidget {
@@ -12,13 +14,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedPage = 0;
+  final List<Widget> _listPages = [];
 
-  final _listPages = [
-    HomeScreen(),
-    BookmarkScreen(),
-    Center(child: Text('Notifications')),
-    Center(child: Text('Profile')),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _listPages.addAll([
+      MainResponsive(small: HomeScreenSmall(), medium: HomeScreenMedium()),
+      const BookmarkScreen(),
+      const Center(child: Text('Notifications')),
+      const Center(child: Text('Profile')),
+    ]);
+  }
 
   void _onItemTapped(int index) {
     setState(() {

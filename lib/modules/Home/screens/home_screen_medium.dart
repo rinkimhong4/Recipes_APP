@@ -6,8 +6,8 @@ import 'package:recipe_app/modules/Home/models/recipe_models.dart';
 import 'package:recipe_app/modules/Home/widgets/card_home_screen.dart';
 import 'package:recipe_app/modules/item/item_detail.dart';
 
-class HomeScreen extends GetView<HomeController> {
-  HomeScreen({super.key});
+class HomeScreenMedium extends GetView<HomeController> {
+  HomeScreenMedium({super.key});
 
   final List<String> tabTitles = [
     'All',
@@ -67,13 +67,13 @@ class HomeScreen extends GetView<HomeController> {
 
   get _buildAppBar => SliverAppBar(
     floating: false,
-    expandedHeight: 220,
+    expandedHeight: 250,
     backgroundColor: Colors.white,
     automaticallyImplyLeading: false,
     pinned: false,
     flexibleSpace: FlexibleSpaceBar(
       background: Padding(
-        padding: EdgeInsets.fromLTRB(24, 70, 24, 0),
+        padding: EdgeInsets.only(left: 24, top: 70, right: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -176,7 +176,7 @@ class HomeScreen extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 14),
+              SizedBox(height: 15),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -198,7 +198,7 @@ class HomeScreen extends GetView<HomeController> {
                         Get.to(() => ItemDetail(recipe: recipe));
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(right: 16),
+                        padding: EdgeInsets.only(right: 10),
                         child: RecipeCard(
                           image: recipe.image ?? '',
                           rating: recipe.rating ?? 0.0,
@@ -210,7 +210,7 @@ class HomeScreen extends GetView<HomeController> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -227,10 +227,10 @@ class HomeScreen extends GetView<HomeController> {
           padding: EdgeInsets.all(16),
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
               mainAxisSpacing: 16,
-              childAspectRatio: 0.75,
+              childAspectRatio: 1,
             ),
             delegate: SliverChildBuilderDelegate((context, index) {
               final recipe = recipes[index];

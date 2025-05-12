@@ -83,7 +83,11 @@ class _RecipeCardState extends State<RecipeCard> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                child: SizedBox(width: 190, height: 130, child: _buildImage()),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 130,
+                  child: _buildImage(),
+                ),
               ),
               Positioned(
                 top: 10,
@@ -112,7 +116,7 @@ class _RecipeCardState extends State<RecipeCard> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               widget.title,
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
           ),

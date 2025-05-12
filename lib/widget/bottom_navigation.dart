@@ -42,8 +42,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           decoration: BoxDecoration(
             color: AppColors.primaryColor[600],
             borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(35),
-              right: Radius.circular(35),
+              left: Radius.circular(30),
+              right: Radius.circular(30),
             ),
           ),
           child: Column(
