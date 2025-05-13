@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 //   static const home = '/home';
 // }
 
-enum RouteView { home, notification, location }
+enum RouteView { home }
 
 extension AppPages on RouteView {
   // Use: RouteView.home.go()
   Future<void> go({
-    bool replacment = false,
+    bool replacement = false,
     bool clearAll = false,
     dynamic arguments,
     int? id,
@@ -22,7 +22,7 @@ extension AppPages on RouteView {
         id: id,
         parameters: parameters,
       );
-    } else if (replacment) {
+    } else if (replacement) {
       return Get.offAndToNamed(
         '/$name',
         arguments: arguments,

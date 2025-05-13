@@ -7,14 +7,14 @@ import 'package:recipe_app/modules/Home/views/home_screen_small.dart';
 import 'package:recipe_app/modules/Home/views/home_screen_medium.dart'; // 👈 Add this
 import 'package:recipe_app/widget/bottom_navigation.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedPage = 0;
   final List<Widget> _listPages = [];
 
