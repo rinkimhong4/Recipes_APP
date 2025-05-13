@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/views/page_controller.dart';
+import 'package:recipe_app/modules/Home/views/main_navigation_screen.dart';
 import 'package:recipe_app/modules/auth/login/login_screen.dart';
 import 'package:recipe_app/modules/auth/widget/socialloginbuttons.dart';
 import 'package:recipe_app/widget/button_custom.dart';
