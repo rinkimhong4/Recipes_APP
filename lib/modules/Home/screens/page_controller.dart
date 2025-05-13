@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/function/responsive/main_responsive.dart';
+import 'package:recipe_app/modules/Home/screens/profile_screen_small.dart';
 import 'package:recipe_app/modules/Home/screens/save_recipe_screen_medium.dart';
 import 'package:recipe_app/modules/Home/screens/save_recipe_screen_small.dart';
 import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
       ),
 
       const Center(child: Text('Notifications')),
-      const Center(child: Text('Profile')),
+      ProfileScreenSmall(),
     ]);
   }
 

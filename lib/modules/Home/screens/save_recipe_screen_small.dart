@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/controller/home_controller.dart';
-import 'package:recipe_app/modules/Home/widgets/bookmark_card.dart';
+import 'package:recipe_app/modules/Home/widgets/save_recipe_card.dart';
 import 'package:recipe_app/modules/item/item_detail.dart';
 
 class SaveRecipeScreenSmall extends StatelessWidget {

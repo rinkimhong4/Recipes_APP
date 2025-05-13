@@ -29,6 +29,7 @@ class _BookmarkCardState extends State<BookmarkCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppColors.primaryColor.withValues(alpha: 0.1),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: isLoading ? _buildShimmer(context) : _buildContent(context),
