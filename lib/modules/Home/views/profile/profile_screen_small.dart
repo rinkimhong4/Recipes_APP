@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/item/item_profile_screen.dart';
+import 'package:recipe_app/modules/Home/views/profile/item_profile_screen.dart';
 
 class ProfileScreenSmall extends StatelessWidget {
   ProfileScreenSmall({super.key});

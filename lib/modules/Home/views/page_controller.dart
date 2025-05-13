@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/function/responsive/main_responsive.dart';
-import 'package:recipe_app/modules/Home/screens/profile_screen_small.dart';
-import 'package:recipe_app/modules/Home/screens/save_recipe_screen_medium.dart';
-import 'package:recipe_app/modules/Home/screens/save_recipe_screen_small.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen_small.dart';
-import 'package:recipe_app/modules/Home/screens/home_screen_medium.dart'; // 👈 Add this
+import 'package:recipe_app/modules/Home/views/profile/profile_screen_small.dart';
+import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_medium.dart';
+import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_small.dart';
+import 'package:recipe_app/modules/Home/views/home_screen_small.dart';
+import 'package:recipe_app/modules/Home/views/home_screen_medium.dart'; // 👈 Add this
 import 'package:recipe_app/widget/bottom_navigation.dart';
 
 class Home extends StatefulWidget {

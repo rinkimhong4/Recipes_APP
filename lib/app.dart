@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:recipe_app/modules/Home/binding/home_binding.dart';
-import 'package:recipe_app/modules/Home/screens/splash_screen.dart';
+import 'package:recipe_app/modules/Home/views/splash/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
