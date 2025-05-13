@@ -30,7 +30,12 @@ class CustomTextField extends StatelessWidget {
         TextField(
           controller: controller,
           obscureText: obscureText,
+          style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
           decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 14,
+            ),
             hintText: hintText,
             hintStyle: AppTextStyle.poppinsSmallerRegular11(
               color: AppColors.neutral.withValues(alpha: 0.5),
@@ -50,7 +55,15 @@ class CustomTextField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: AppColors.ratingColor, width: 1),
+              borderSide: BorderSide(color: AppColors.ratingColor, width: 1.2),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 1),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:recipe_app/modules/Home/screens/page_controller.dart';
 import 'package:recipe_app/modules/auth/login/login_screen.dart';
 import 'package:recipe_app/modules/auth/widget/socialloginbuttons.dart';
 import 'package:recipe_app/widget/button_custom.dart';
+import 'package:recipe_app/widget/password_input.dart';
 import 'package:recipe_app/widget/text_field.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -65,16 +66,16 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 25),
               CustomTextField(label: 'Email', hintText: 'Enter email'),
               SizedBox(height: 25),
-              CustomTextField(
+              PasswordInput(
                 label: 'Enter Password',
+                textEditingController: TextEditingController(),
                 hintText: 'Enter Password',
-                obscureText: true,
               ),
               SizedBox(height: 25),
-              CustomTextField(
+              PasswordInput(
                 label: 'Confirm Password',
+                textEditingController: TextEditingController(),
                 hintText: 'Confirm Password',
-                obscureText: true,
               ),
               SizedBox(height: 20),
               Align(
