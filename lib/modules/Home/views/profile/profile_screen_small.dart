@@ -112,7 +112,7 @@ class ProfileScreenSmall extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: 14, right: 14, top: 14),
       child: Material(
-        color: AppColors.primaryColor.withValues(alpha: 0.08),
+        color: AppColors.primaryColor.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
