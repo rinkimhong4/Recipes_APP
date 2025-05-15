@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/auth/login/login_screen.dart';
 import 'package:recipe_app/widget/button_custom.dart';
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/BGSplashScreen.png'),
                 fit: BoxFit.cover,
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.black26, Colors.black87],
                 begin: Alignment.topCenter,
@@ -40,39 +41,66 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/images/hong_profile.png'),
+                ZoomIn(
+                  duration: Duration(seconds: 3),
+                  animate: true,
+                  child: CircleAvatar(
+                    radius: 55,
+                    backgroundImage: AssetImage(
+                      'assets/images/hong_profile.png',
+                    ),
+                  ),
                 ),
                 SizedBox(height: 14),
-                Text(
-                  '100K+ Premium Recipe ',
-                  style: AppTextStyle.poppinsLargeRegular20(),
+                FadeIn(
+                  duration: Duration(seconds: 3),
+                  child: Text(
+                    '100K+ Premium Recipe ',
+                    style: AppTextStyle.poppinsLargeRegular20(),
+                  ),
                 ),
                 SizedBox(height: 222),
-                Text('Get ', style: AppTextStyle.poppinsTitleBoldBig50()),
-                Text('Cooking', style: AppTextStyle.poppinsTitleBoldBig50()),
+                BounceInUp(
+                  duration: Duration(seconds: 1),
+                  child: Text(
+                    'Get ',
+                    style: AppTextStyle.poppinsTitleBoldBig50(),
+                  ),
+                ),
+                BounceInUp(
+                  duration: Duration(seconds: 1),
+                  child: Text(
+                    'Cooking',
+                    style: AppTextStyle.poppinsTitleBoldBig50(),
+                  ),
+                ),
                 SizedBox(height: 20),
-                Text(
-                  'Simple way to find Tasty Recipe',
-                  style: AppTextStyle.poppinsNormalRegular16(),
+                BounceInUp(
+                  duration: Duration(seconds: 2),
+                  child: Text(
+                    'Simple way to find Tasty Recipe',
+                    style: AppTextStyle.poppinsNormalRegular16(),
+                  ),
                 ),
                 SizedBox(height: 60),
-                NavButton(
-                  context,
-                  label: 'Start Cooking',
-                  icon: Icons.chevron_right,
-                  width: 250,
-                  height: 54,
-                  textStyle: AppTextStyle.poppinsNormalBold16(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
-                  },
+                BounceInUp(
+                  duration: Duration(seconds: 2),
+                  animate: true,
+
+                  child: NavButton(
+                    context,
+                    label: 'Start Cooking',
+                    icon: Icons.chevron_right,
+                    width: 250,
+                    height: 54,
+                    textStyle: AppTextStyle.poppinsNormalBold16(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
