@@ -413,19 +413,124 @@ class _EditProfileContentState extends State<EditProfileContent> {
 //                                AboutUsContent
 // ===========================================================================
 
-class AboutUsContent extends StatelessWidget {
+class AboutUsContent extends StatefulWidget {
   const AboutUsContent({super.key});
 
   @override
+  State<AboutUsContent> createState() => _AboutUsContentState();
+}
+
+class _AboutUsContentState extends State<AboutUsContent> {
+  @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        color: Colors.white,
+        child: SafeArea(child: SingleChildScrollView(child: _buildBody())),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "AboutUsContent",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            "About Us",
+            style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Welcome to My-Recipe the ultimate mobile app for food lovers, home cooks, and busy people who still crave a good homemade meal.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "We created My-Recipe with a simple idea: everyone can cook with the right guidance. Whether you're a beginner learning the basics or a pro looking to explore new cuisines, our app is here to support your cooking journey.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Cooking should never feel overwhelming. With My-Recipe in your pocket, you'll have access to a growing collection of recipes, step-by-step instructions, and smart tools to make everyday cooking easier, faster, and more enjoyable.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 30),
+          Text(
+            "Our Mission",
+            style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "To make home cooking simple, smart, and satisfying. Were here to help you cook confidently, save time, eat healthier, and fall in love with your kitchen again.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 30),
+          Text(
+            "Our Features",
+            style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Easy-to-Follow Recipes",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Step-by-step cooking instructions with clear images and measurements for every recipe.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Wide Range of Categories",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "From breakfast and quick snacks to vegetarian dishes, desserts, and international cuisine there's something for everyone.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Smart Recipe Search",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Find recipes by ingredients, cooking time, diet type (vegan, gluten-free, keto), or difficulty level.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Visual Cooking Guides",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Each recipe comes with rich images and, in some cases, short video clips for key steps.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Add recipe ingredients directly to your built in shopping list and check them off while you shop.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Cook anytime, day or night, with a comfortable viewing experience.",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
+          ),
+          SizedBox(height: 30),
+          Text(
+            "Why Choose Us?",
+            style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+          ),
+          SizedBox(height: 16),
+          Text(
+            "User-first design for mobile devices, Constant updates with new recipes every week, Lightweight and fast  works smoothly even offline (optional downloads), Built with ❤️ by foodies for foodies",
+            style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
           ),
         ],
       ),
