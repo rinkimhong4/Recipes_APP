@@ -109,9 +109,14 @@ class _EditProfileContentState extends State<EditProfileContent> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
           color: Colors.white,
-          child: SafeArea(child: SingleChildScrollView(child: _buildEdit)),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(color: Colors.white, child: _buildEdit),
+            ),
+          ),
         ),
       ),
     );
