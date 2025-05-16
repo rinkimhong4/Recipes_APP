@@ -431,8 +431,8 @@ class _AboutUsContentState extends State<AboutUsContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Obx(
+      body: Scaffold(
+        body: Obx(
           () =>
               controller.isLoading.value
                   ? SizedBox()

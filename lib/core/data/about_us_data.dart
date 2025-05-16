@@ -5,7 +5,7 @@ class Datas {
         "title": "About Us",
         "description": [
           "Welcome to My-Recipe the ultimate mobile app for food lovers, home cooks, and busy people who still crave a good homemade meal.",
-          "We created xMy-Recipe with a simple idea: everyone can cook with the right guidance. Whether you're a beginner learning the basics or a pro looking to explore new cuisines, our app is here to support your cooking journey.",
+          "We created My-Recipe with a simple idea: everyone can cook with the right guidance. Whether you're a beginner learning the basics or a pro looking to explore new cuisines, our app is here to support your cooking journey.",
           "Cooking should never feel overwhelming. With My-Recipe in your pocket, you'll have access to a growing collection of recipes, step-by-step instructions, and smart tools to make everyday cooking easier, faster, and more enjoyable.",
         ],
       },

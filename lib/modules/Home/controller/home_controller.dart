@@ -14,18 +14,12 @@ class HomeController extends GetxController {
 
   Future<void> loadingRecipe() async {
     isLoading.value = true;
-    errorMessage.value = '';
-    try {
-      recipeModels = await apiService.callApi<RecipeModels>(
-        endpoint: RECIPE,
-        body: {},
-        fromJson: (data) => RecipeModels.fromJson(data),
-      );
-    } catch (e) {
-      errorMessage.value = 'Failed to load recipes: $e';
-    } finally {
-      isLoading.value = false;
-    }
+    recipeModels = await apiService.callApi<RecipeModels>(
+      endpoint: RECIPE,
+      body: {},
+      fromJson: (data) => RecipeModels.fromJson(data),
+    );
+    isLoading.value = false;
   }
 
   AboutUsModels aboutUsModels = AboutUsModels();
