@@ -38,26 +38,24 @@ class _RecipeCardState extends State<RecipeCard> {
   }
 
   Widget _buildImage() {
-    if (widget.image.startsWith('data:image')) {
-      return Image.memory(
-        base64Decode(widget.image.split(',').last),
-        fit: BoxFit.cover,
-      );
-    } else if (_isNetworkImage) {
-      return CachedNetworkImage(
-        imageUrl: widget.image,
-        fit: BoxFit.cover,
-        placeholder:
-            (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              child: Container(color: Colors.grey.shade300),
-            ),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      );
-    } else {
-      return Image.asset(widget.image, fit: BoxFit.cover);
-    }
+    return widget.image.startsWith('data:image')
+        ? Image.memory(
+          base64Decode(widget.image.split(',').last),
+          fit: BoxFit.cover,
+        )
+        : _isNetworkImage
+        ? CachedNetworkImage(
+          imageUrl: widget.image,
+          fit: BoxFit.cover,
+          placeholder:
+              (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                child: Container(color: Colors.grey.shade300),
+              ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        )
+        : Image.asset(widget.image, fit: BoxFit.cover);
   }
 
   @override

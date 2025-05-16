@@ -99,6 +99,23 @@ class ProfileScreenSmall extends StatelessWidget {
             );
           }),
         ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Sign Out',
+                  style: AppTextStyle.poppinsSmallRegular14(
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

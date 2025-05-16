@@ -139,7 +139,10 @@ class AppTextStyle {
     color: color ?? AppColors.neutral[100],
   );
 
-  static TextStyle poppinsNormalRegular16({Color? color}) => TextStyle(
+  static TextStyle poppinsNormalRegular16({
+    Color? color,
+    FontWeight? fontWeight,
+  }) => TextStyle(
     fontFamily: _fontFamily,
     fontWeight: FontWeight.normal,
     fontSize: 16,

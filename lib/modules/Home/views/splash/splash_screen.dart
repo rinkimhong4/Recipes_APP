@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   duration: Duration(seconds: 2),
                   child: Text(
                     'Simple way to find Tasty Recipe',
-                    style: AppTextStyle.poppinsNormalRegular16(),
+                    style: AppTextStyle.poppinsNormalBold16(),
                   ),
                 ),
                 SizedBox(height: 60),
