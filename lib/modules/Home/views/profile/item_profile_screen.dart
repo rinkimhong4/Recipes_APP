@@ -623,154 +623,101 @@ class TermOfUseContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTitle('Terms of Use for Recipe App'),
-              _buildDate('Last Updated: May 16, 2025'),
-              _buildIntro(),
-              _buildSection('1. Acceptance of Terms', '''
-By using the App, you agree to these Terms. You confirm that:
-- You are at least 13 years old. Users under 18 require parental consent.
-- You have the authority to accept these Terms.
-- You will comply with all applicable laws.
-
-We may update these Terms. Continued use after updates means you accept them. For questions, email rinkimhong4@gmail.com.
-'''),
-              _buildSection('2. License to Use the App', '''
-We grant you a limited, non-exclusive, non-transferable, revocable license to use the App on your device for personal, non-commercial purposes. You may not:
-- Copy, modify, or distribute the App, except for personal backups.
-- Reverse-engineer or disassemble the App.
-- Rent, lease, sell, or sublicense the App.
-- Use the App for illegal purposes.
-'''),
-              _buildSection('3. App Features and Content', '''
-The App offers:
-- Recipes with ingredients and instructions.
-- Contact options (phone, email, Facebook).
-- A map showing our location (#168, Street 68, Phnom Penh, Cambodia).
-
-**Intellectual Property**
-- Our content (design, text, images, recipes) is protected by copyright and trademark laws.
-- User content (e.g., recipes, feedback) grants us a worldwide, royalty-free license to use and display.
-- Third-party content (e.g., recipes) is credited to its creators.
-'''),
-              _buildSection('4. User Conduct', '''
-You agree to:
-- Not post unlawful, defamatory, or obscene content.
-- Not harass or harm others.
-- Not attempt unauthorized access.
-- Not share copyrighted recipes without permission.
-
-We may remove content or suspend your access for violations.
-'''),
-              _buildSection('5. Contact Information', '''
-Contact us at:
-- Phone: 086 240 668 / 012 345 567
-- Email: rinkimhong4@gmail.com
-- Facebook: https://www.facebook.com/rinkimhong
-- Address: #168, Street 68, Phnom Penh, Cambodia
-
-Do not misuse these details (e.g., spamming).
-'''),
-              _buildSection('6. Privacy', '''
-Your use is subject to our Privacy Policy. We may collect device or usage data. Using the App means you consent to our data practices.
-'''),
-              _buildSection('7. Third-Party Services', '''
-The App uses:
-- CachedNetworkImage for images.
-- Google Maps for location data.
-- Social media links (e.g., Facebook).
-
-We are not responsible for third-party services. Review their terms.
-'''),
-              _buildSection('8. Termination', '''
-We may suspend or terminate your access for violations. Upon termination, delete the App. Sections 3, 9, 10, and 12 remain effective.
-'''),
-              _buildSection('9. Disclaimer', '''
-The App is provided "as is" without warranties. We do not guarantee:
-- Content accuracy or reliability.
-- Uninterrupted service.
-- Availability of contact methods.
-
-Use recipes at your own risk.
-'''),
-              _buildSection('10. Limitation of Liability', '''
-We are not liable for damages from:
-- Inaccurate or unsafe recipes.
-- Contact failures.
-- Third-party service errors.
-
-Liability is limited to any amount you paid for the App.
-'''),
-              _buildSection('11. Indemnification', '''
-You agree to indemnify us for claims or damages from your misuse or violation of these Terms.
-'''),
-              _buildSection('12. Governing Law', '''
-These Reducing redundancy and improving flow Terms are governed by Cambodian law. Disputes will be resolved in Phnom Penh courts, unless local laws differ.
-'''),
-              _buildSection('13. Jurisdictional Notices', '''
-Local laws may grant additional rights. If a term is unenforceable, others remain valid. App stores may impose extra terms.
-'''),
-              _buildSection('14. Contact Us', '''
-For questions, reach us at:
-- Email: rinkimhong4@gmail.com
-- Phone: 086 240 668 / 012 345 567
-- Address: #168, Street 68, Phnom Penh, Cambodia
-
-Do not use the App until your questions are answered.
-
-By using Recipe App, you agree to these Terms. Thank you for choosing our App!
-'''),
-            ],
-          ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Terms of Use",
+              style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+            ),
+            SizedBox(height: 24),
+            Text(
+              "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 18),
+            Text(
+              "1. Use of Content",
+              style: AppTextStyle.poppinsNormalRegular16(
+                color: AppColors.primaryColor,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 18),
+            Text(
+              "2. User Conduct",
+              style: AppTextStyle.poppinsNormalRegular16(
+                color: AppColors.primaryColor,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 18),
+            Text(
+              "3. Privacy",
+              style: AppTextStyle.poppinsNormalRegular16(
+                color: AppColors.primaryColor,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 18),
+            Text(
+              "4. Disclaimer",
+              style: AppTextStyle.poppinsNormalRegular16(
+                color: AppColors.primaryColor,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 18),
+            Text(
+              "5. Changes to Terms",
+              style: AppTextStyle.poppinsNormalRegular16(
+                color: AppColors.primaryColor,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+            SizedBox(height: 24),
+            Text(
+              "If you have any questions about these terms, please contact us through the Contact Us section.",
+              style: AppTextStyle.poppinsSmallRegular14(
+                color: AppColors.neutral,
+              ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildDate(String date) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Text(date, style: const TextStyle(fontSize: 14)),
-    );
-  }
-
-  Widget _buildIntro() {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 16.0),
-      child: Text(
-        'Please read these Terms of Use carefully before using Recipe App. These Terms govern your use of the App, provided by an independent developer ("we," "us," or "our"). By using the App, you agree to these Terms. If you do not agree, do not use the App.',
-      ),
-    );
-  }
-
-  Widget _buildSection(String title, String content) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(content, style: const TextStyle(fontSize: 14)),
-        ],
       ),
     );
   }

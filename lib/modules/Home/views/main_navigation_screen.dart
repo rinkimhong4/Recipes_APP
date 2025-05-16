@@ -27,8 +27,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         small: SaveRecipeScreenSmall(),
         medium: SaveRecipeScreenMedium(),
       ),
-
-      const Center(child: Text('Notifications')),
+      // const Center(child: Text('Notifications')),
       ProfileScreenSmall(),
     ]);
   }

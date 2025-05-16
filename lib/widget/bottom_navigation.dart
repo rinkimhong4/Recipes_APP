@@ -31,7 +31,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     List iconList = [
       Icons.home_filled,
       Icons.bookmark_add_sharp,
-      Icons.notifications_sharp,
+      // Icons.notifications_sharp,
       Icons.person,
     ];
     return Stack(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/controller/home_controller.dart';
 import 'package:recipe_app/modules/Home/models/recipe_models.dart';
+import 'package:recipe_app/modules/Home/views/filter_screen.dart';
 import 'package:recipe_app/modules/Home/widgets/card_home_screen.dart';
 import 'package:recipe_app/modules/item/item_detail.dart';
 
@@ -118,6 +119,7 @@ class HomeScreenMedium extends GetView<HomeController> {
                   GestureDetector(
                     onTap: () {
                       //
+                      buildPopup();
                     },
                     child: Container(
                       padding: EdgeInsets.all(10),
