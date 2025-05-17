@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/controller/home_controller.dart';
 import '../../models/about_us_model.dart';
@@ -58,43 +60,46 @@ class EditProfileContent extends StatefulWidget {
 
 class _EditProfileContentState extends State<EditProfileContent> {
   final _formKey = GlobalKey<FormState>();
-  File? _pickedImage;
+  final ImagePicker _picker = ImagePicker();
+  late final HomeController controller;
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _pickedImage = File(pickedFile.path);
-      });
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('No image selected')));
+  @override
+  void initState() {
+    super.initState();
+    try {
+      controller = Get.find<HomeController>();
+      if (!['Male', 'Female', 'Other'].contains(controller.gender.value)) {
+        controller.gender.value = '';
+      }
+    } catch (e) {
+      controller = Get.put(HomeController());
     }
   }
 
-  DateTime? _selectedDate = DateTime.now();
-  String _selectedGender = 'Male';
-  final TextEditingController _nameController = TextEditingController(
-    text: 'Rin Kimhong',
-  );
-  final TextEditingController _phoneController = TextEditingController(
-    text: '+855 86 240 668',
-  );
-  final TextEditingController _emailController = TextEditingController(
-    text: 'Rinkimhong4@gmail.com',
-  );
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
-  String _formatDate(DateTime date) {
-    return DateFormat('dd / MMM / yyyy').format(date);
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        controller.profileImage.value = File(pickedFile.path);
+      } else {
+        ScaffoldMessenger.of(context);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+    }
   }
 
   Future<void> _pickDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime(2000),
+      initialDate: controller.birthDate.value ?? DateTime(2000),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (context, child) {
@@ -116,18 +121,12 @@ class _EditProfileContentState extends State<EditProfileContent> {
       },
     );
     if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-      });
+      controller.birthDate.value = picked;
     }
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
-    super.dispose();
+  String _formatDate(DateTime date) {
+    return DateFormat('dd / MMM / yyyy').format(date);
   }
 
   @override
@@ -137,11 +136,39 @@ class _EditProfileContentState extends State<EditProfileContent> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: _buildEditForm(),
-            ),
+          child: Obx(
+            () =>
+                controller.isLoading.value
+                    ? SizedBox()
+                    : controller.errorMessage.value.isNotEmpty
+                    ? Center(
+                      child: Text(
+                        controller.errorMessage.value,
+                        style: AppTextStyle.poppinsSmallRegular14(
+                          color: AppColors.neutral,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                    : SmartRefresher(
+                      controller: controller.refreshController.value,
+                      enablePullDown: true,
+                      header: WaterDropHeader(
+                        waterDropColor: AppColors.primaryColor,
+                      ),
+                      onRefresh: controller.onRefresh,
+                      child: SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: _buildEditForm(),
+                          ),
+                        ),
+                      ),
+                    ),
           ),
         ),
       ),
@@ -156,208 +183,243 @@ class _EditProfileContentState extends State<EditProfileContent> {
         children: [
           SizedBox(height: 4),
           Center(
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: 85,
-                  backgroundColor: AppColors.primaryColor[200],
-                  child: CircleAvatar(
-                    radius: 80,
-                    backgroundColor: AppColors.primaryColor[400],
+            child: Obx(() {
+              return Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: MediaQuery.of(context).size.width > 1000 ? 100 : 85,
+                    backgroundColor: AppColors.primaryColor[200],
                     child: CircleAvatar(
-                      radius: 75,
-                      backgroundImage:
-                          _pickedImage != null
-                              ? FileImage(_pickedImage!)
-                              : const AssetImage(
-                                    'assets/images/hong_profile.png',
-                                  )
-                                  as ImageProvider,
+                      radius:
+                          MediaQuery.of(context).size.width > 1000 ? 95 : 80,
+                      backgroundColor: AppColors.primaryColor[400],
+                      child: CircleAvatar(
+                        radius:
+                            MediaQuery.of(context).size.width > 1000 ? 90 : 75,
+                        backgroundImage:
+                            controller.profileImage.value != null
+                                ? FileImage(controller.profileImage.value!)
+                                : AssetImage('assets/images/hong_profile.png')
+                                    as ImageProvider,
+                      ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(Icons.edit, color: Colors.white, size: 20),
                     ),
-                    child: Icon(Icons.edit, color: Colors.white, size: 20),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ),
           SizedBox(height: 14),
           _buildLabel('Name'),
           SizedBox(height: 4),
-          TextFormField(
-            controller: _nameController,
-            decoration: _inputDecoration('Enter your name'),
-            validator:
-                (value) =>
-                    value == null || value.isEmpty
-                        ? 'Please enter your name'
-                        : null,
-          ),
+          Obx(() {
+            return TextFormField(
+              initialValue: controller.name.value,
+              onChanged: (value) => controller.name.value = value,
+              decoration: _inputDecoration('Enter your name'),
+              validator:
+                  (value) =>
+                      value == null || value.isEmpty
+                          ? 'Please enter your name'
+                          : null,
+            );
+          }),
           SizedBox(height: 18),
           _buildLabel('Phone Number'),
           SizedBox(height: 4),
-          TextFormField(
-            controller: _phoneController,
-            decoration: _inputDecoration('Enter your phone number'),
-            keyboardType: TextInputType.phone,
-            validator:
-                (value) =>
-                    value == null || value.isEmpty
-                        ? 'Please enter your phone number'
-                        : null,
-          ),
+          Obx(() {
+            return TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
+              initialValue: controller.phone.value,
+              onChanged: (value) => controller.phone.value = value,
+              decoration: _inputDecoration('Enter your phone number'),
+              keyboardType: TextInputType.phone,
+              validator:
+                  (value) =>
+                      value == null || value.isEmpty
+                          ? 'Please enter your phone number'
+                          : value.replaceAll(' ', '').length < 9
+                          ? 'Please enter a valid phone number'
+                          : null,
+            );
+          }),
           SizedBox(height: 18),
           _buildLabel('Date of Birth'),
           SizedBox(height: 4),
           GestureDetector(
             onTap: _pickDate,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primaryColor.withValues(alpha: 0.5),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
+            child: Obx(() {
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.primaryColor.withValues(alpha: 0.5),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _selectedDate != null
-                        ? _formatDate(_selectedDate!)
-                        : 'Select Date',
-                    style: AppTextStyle.poppinsNormalRegular16(
-                      color:
-                          _selectedDate != null
-                              ? AppColors.neutral
-                              : AppColors.neutral.withValues(alpha: 0.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
                     ),
-                  ),
-                  Icon(Icons.calendar_today, color: AppColors.primaryColor),
-                ],
-              ),
-            ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      controller.birthDate.value != null
+                          ? _formatDate(controller.birthDate.value!)
+                          : 'Select Date',
+                      style: AppTextStyle.poppinsNormalRegular16(
+                        color:
+                            controller.birthDate.value != null
+                                ? AppColors.neutral
+                                : AppColors.neutral.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    Icon(Icons.calendar_today, color: AppColors.primaryColor),
+                  ],
+                ),
+              );
+            }),
           ),
           SizedBox(height: 18),
           _buildLabel('Gender'),
           SizedBox(height: 4),
-          DropdownButtonFormField2<String>(
-            value: _selectedGender,
-            decoration: _inputDecoration('Select Gender'),
-            items:
-                ['Male', 'Female', 'Other']
-                    .map(
-                      (gender) => DropdownMenuItem<String>(
-                        value: gender,
-                        child: Text(
-                          gender,
-                          style: AppTextStyle.poppinsNormalRegular16(
-                            color: AppColors.neutral,
+          Obx(() {
+            final validGender =
+                ['Male', 'Female', 'Other'].contains(controller.gender.value)
+                    ? controller.gender.value
+                    : null;
+            return DropdownButtonFormField2<String>(
+              value: validGender,
+              decoration: _inputDecoration('Select Gender'),
+              items:
+                  ['Male', 'Female', 'Other']
+                      .map(
+                        (gender) => DropdownMenuItem<String>(
+                          value: gender,
+                          child: Text(
+                            gender,
+                            style: AppTextStyle.poppinsNormalRegular16(
+                              color: AppColors.neutral,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                    .toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedGender = value!;
-              });
-            },
-            validator:
-                (value) =>
-                    value == null || value.isEmpty
-                        ? 'Please select a gender'
-                        : null,
-            isExpanded: true,
-            dropdownStyleData: DropdownStyleData(
-              maxHeight: 200,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  controller.gender.value = value;
+                }
+              },
+              validator:
+                  (value) => value == null ? 'Please select a gender' : null,
+              isExpanded: true,
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                offset: Offset(0, -5),
               ),
-              offset: Offset(0, -5),
-            ),
-            iconStyleData: IconStyleData(
-              icon: Icon(Icons.arrow_drop_down, color: AppColors.primaryColor),
-            ),
-          ),
+              iconStyleData: IconStyleData(
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+            );
+          }),
           SizedBox(height: 18),
           _buildLabel('Email'),
           SizedBox(height: 4),
-          TextFormField(
-            controller: _emailController,
-            decoration: _inputDecoration('Enter your email'),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-              if (!emailRegex.hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
-          ),
+          Obx(() {
+            return TextFormField(
+              initialValue: controller.email.value,
+              onChanged: (value) => controller.email.value = value,
+              decoration: _inputDecoration('Enter your email'),
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
+            );
+          }),
           SizedBox(height: 40),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              foregroundColor: Colors.white,
-              minimumSize: Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+          Obx(() {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor,
+                foregroundColor: Colors.white,
+                minimumSize: Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 2,
               ),
-              elevation: 2,
-            ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: AppColors.primaryColor,
-                    content: Row(
-                      children: const [
-                        Icon(Icons.check, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text('Profile updated successfully'),
-                      ],
-                    ),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-                // Save logic here
-              }
-            },
-            child: Text(
-              'Save Profile',
-              style: AppTextStyle.poppinsNormalRegular16(color: Colors.white),
-            ),
-          ),
+              onPressed:
+                  controller.isLoading.value
+                      ? null
+                      : () async {
+                        if (_formKey.currentState!.validate()) {
+                          await controller.saveProfile();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: AppColors.primaryColor,
+                              content: Row(
+                                children: [
+                                  Icon(Icons.check, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text('Profile updated successfully'),
+                                ],
+                              ),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        }
+                      },
+              child:
+                  controller.isLoading.value
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                        'Save Profile',
+                        style: AppTextStyle.poppinsNormalRegular16(
+                          color: Colors.white,
+                        ),
+                      ),
+            );
+          }),
           SizedBox(height: 20),
         ],
       ),
@@ -410,37 +472,41 @@ class AboutUsContent extends StatefulWidget {
 
 class _AboutUsContentState extends State<AboutUsContent> {
   final HomeController controller = Get.find<HomeController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Scaffold(
-        body: Obx(
-          () =>
-              controller.isLoading.value
-                  ? SizedBox()
-                  : controller.errorMessage.value.isNotEmpty
-                  ? Center(
-                    child: Text(
-                      controller.errorMessage.value,
-                      style: AppTextStyle.poppinsSmallRegular14(
-                        color: AppColors.neutral,
-                      ),
-                      textAlign: TextAlign.center,
+      body: Obx(
+        () =>
+            controller.isLoading.value
+                ? SizedBox()
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
                     ),
-                  )
-                  : SingleChildScrollView(
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(
                     child: _buildBody(controller.aboutUsModels),
                   ),
-        ),
+                ),
       ),
     );
   }
 
   Widget _buildBody(AboutUsModels aboutUsModels) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -465,7 +531,7 @@ class _AboutUsContentState extends State<AboutUsContent> {
                   _buildParagraph(item.name ?? ""),
                   if (item.description != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: 4),
+                      padding: EdgeInsets.only(top: 4),
                       child: _buildParagraph(
                         item.description is List<String>
                             ? (item.description as List<String>).join('\n')
@@ -499,7 +565,7 @@ class _AboutUsContentState extends State<AboutUsContent> {
 
   Widget _buildParagraph(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 12),
       child: Text(
         text,
         style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
@@ -530,12 +596,39 @@ class ContactUsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody);
+    final HomeController controller = Get.find<HomeController>();
+
+    return Scaffold(
+      body: Obx(
+        () =>
+            controller.isLoading.value
+                ? SizedBox()
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(child: _buildBody),
+                ),
+      ),
+    );
   }
 
   get _buildBody {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -601,107 +694,99 @@ class ContactUsContent extends StatelessWidget {
 //                                TermOfUseContent
 // ===========================================================================
 class TermOfUseContent extends StatelessWidget {
-  const TermOfUseContent({super.key});
+  TermOfUseContent({super.key});
+  final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Terms of Use",
-              style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
-            ),
-            SizedBox(height: 24),
-            Text(
-              "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              "1. Use of Content",
-              style: AppTextStyle.poppinsNormalRegular16(
-                color: AppColors.primaryColor,
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              "2. User Conduct",
-              style: AppTextStyle.poppinsNormalRegular16(
-                color: AppColors.primaryColor,
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              "3. Privacy",
-              style: AppTextStyle.poppinsNormalRegular16(
-                color: AppColors.primaryColor,
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              "4. Disclaimer",
-              style: AppTextStyle.poppinsNormalRegular16(
-                color: AppColors.primaryColor,
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              "5. Changes to Terms",
-              style: AppTextStyle.poppinsNormalRegular16(
-                color: AppColors.primaryColor,
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 24),
-            Text(
-              "If you have any questions about these terms, please contact us through the Contact Us section.",
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-          ],
-        ),
+      body: Obx(
+        () =>
+            controller.isLoading.value
+                ? SizedBox()
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSectionTitle("Terms of Use"),
+                        SizedBox(height: 24),
+                        _buildParagraph(
+                          "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
+                        ),
+                        SizedBox(height: 18),
+                        _buildSectionTitle("1. Use of Content"),
+                        SizedBox(height: 6),
+                        _buildParagraph(
+                          "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
+                        ),
+                        SizedBox(height: 18),
+                        _buildSectionTitle("2. User Conduct"),
+                        SizedBox(height: 6),
+                        _buildParagraph(
+                          "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
+                        ),
+                        SizedBox(height: 18),
+                        _buildSectionTitle("3. Privacy"),
+                        SizedBox(height: 6),
+                        _buildParagraph(
+                          "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
+                        ),
+                        SizedBox(height: 18),
+                        _buildSectionTitle("4. Disclaimer"),
+                        SizedBox(height: 6),
+                        _buildParagraph(
+                          "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
+                        ),
+                        SizedBox(height: 18),
+                        _buildSectionTitle("5. Changes to Terms"),
+                        SizedBox(height: 6),
+                        _buildParagraph(
+                          "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
+                        ),
+                        SizedBox(height: 24),
+                        _buildParagraph(
+                          "If you have any questions about these terms, please contact us through the Contact Us section.",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String text) {
+    return Text(
+      text,
+      style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
+    );
+  }
+
+  Widget _buildParagraph(String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
+      child: Text(
+        text,
+        style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
       ),
     );
   }

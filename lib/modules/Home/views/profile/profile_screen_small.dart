@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
+import 'package:recipe_app/modules/Home/controller/home_controller.dart';
+import 'package:recipe_app/modules/Home/views/profile/format_phone_number.dart';
 import 'package:recipe_app/modules/Home/views/profile/item_profile_screen.dart';
 
 class ProfileScreenSmall extends StatelessWidget {
@@ -14,10 +17,16 @@ class ProfileScreenSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white, body: _buildBody(context));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Obx(() {
+        return _buildBody(context);
+      }),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return Column(
       children: [
         Container(
@@ -41,7 +50,7 @@ class ProfileScreenSmall extends StatelessWidget {
               Positioned(
                 top: 50,
                 child: Text(
-                  'Hello, Hong',
+                  controller.name.value,
                   style: AppTextStyle.poppinsLargeBold20(),
                 ),
               ),
@@ -55,7 +64,7 @@ class ProfileScreenSmall extends StatelessWidget {
               Positioned(
                 bottom: 20,
                 child: Text(
-                  '+855 86-240-668',
+                  PhoneNumberFormatter.format(controller.phone.value),
                   style: AppTextStyle.poppinsSmallBold14(),
                 ),
               ),
@@ -67,9 +76,14 @@ class ProfileScreenSmall extends StatelessWidget {
                   backgroundColor: Colors.white24,
                   child: CircleAvatar(
                     radius: 65,
-                    backgroundImage: AssetImage(
-                      'assets/images/hong_profile.png',
-                    ),
+                    backgroundImage:
+                        controller.profileImage.value != null
+                            ? FileImage(controller.profileImage.value!)
+                            : AssetImage('assets/images/hong_profile.png')
+                                as ImageProvider,
+                    // AssetImage(
+                    //   'assets/images/hong_profile.png',
+                    // ),
                   ),
                 ),
               ),
