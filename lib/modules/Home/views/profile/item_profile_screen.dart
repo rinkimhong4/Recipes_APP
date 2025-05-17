@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/controller/home_controller.dart';
@@ -53,6 +58,23 @@ class EditProfileContent extends StatefulWidget {
 
 class _EditProfileContentState extends State<EditProfileContent> {
   final _formKey = GlobalKey<FormState>();
+  File? _pickedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _pickedImage = File(pickedFile.path);
+      });
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('No image selected')));
+    }
+  }
+
   DateTime? _selectedDate = DateTime.now();
   String _selectedGender = 'Male';
   final TextEditingController _nameController = TextEditingController(
@@ -114,11 +136,11 @@ class _EditProfileContentState extends State<EditProfileContent> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-          color: Colors.white,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(color: Colors.white, child: _buildEdit),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: _buildEditForm(),
             ),
           ),
         ),
@@ -126,255 +148,218 @@ class _EditProfileContentState extends State<EditProfileContent> {
     );
   }
 
-  Widget get _buildEdit {
-    return Padding(
-      padding: EdgeInsets.all(20.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 4),
-            Center(
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CircleAvatar(
-                    radius: 85,
-                    backgroundColor: AppColors.primaryColor[200],
+  Widget _buildEditForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 4),
+          Center(
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                CircleAvatar(
+                  radius: 85,
+                  backgroundColor: AppColors.primaryColor[200],
+                  child: CircleAvatar(
+                    radius: 80,
+                    backgroundColor: AppColors.primaryColor[400],
                     child: CircleAvatar(
-                      radius: 80,
-                      backgroundColor: AppColors.primaryColor[400],
-                      child: CircleAvatar(
-                        radius: 75,
-                        backgroundImage: AssetImage(
-                          'assets/images/hong_profile.png',
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withValues(alpha: 0.2),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      radius: 75,
+                      backgroundImage:
+                          _pickedImage != null
+                              ? FileImage(_pickedImage!)
+                              : const AssetImage(
+                                    'assets/images/hong_profile.png',
+                                  )
+                                  as ImageProvider,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Implement image picker logic here
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Image picker not implemented')),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 6,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Icon(Icons.edit, color: Colors.white, size: 20),
+                ),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 6,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
                     ),
+                    child: Icon(Icons.edit, color: Colors.white, size: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 14),
+          _buildLabel('Name'),
+          SizedBox(height: 4),
+          TextFormField(
+            controller: _nameController,
+            decoration: _inputDecoration('Enter your name'),
+            validator:
+                (value) =>
+                    value == null || value.isEmpty
+                        ? 'Please enter your name'
+                        : null,
+          ),
+          SizedBox(height: 18),
+          _buildLabel('Phone Number'),
+          SizedBox(height: 4),
+          TextFormField(
+            controller: _phoneController,
+            decoration: _inputDecoration('Enter your phone number'),
+            keyboardType: TextInputType.phone,
+            validator:
+                (value) =>
+                    value == null || value.isEmpty
+                        ? 'Please enter your phone number'
+                        : null,
+          ),
+          SizedBox(height: 18),
+          _buildLabel('Date of Birth'),
+          SizedBox(height: 4),
+          GestureDetector(
+            onTap: _pickDate,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: AppColors.primaryColor.withValues(alpha: 0.5),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 14),
-            Text(
-              'Name',
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 4),
-            TextFormField(
-              controller: _nameController,
-              decoration: _inputDecoration('Enter your name'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your name';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 18),
-            Text(
-              'Phone Number',
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 4),
-            TextFormField(
-              controller: _phoneController,
-              decoration: _inputDecoration('Enter your phone number'),
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 18),
-            Text(
-              'Date of Birth',
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 4),
-            GestureDetector(
-              onTap: _pickDate,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppColors.primaryColor.withValues(alpha: 0.5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _selectedDate != null
+                        ? _formatDate(_selectedDate!)
+                        : 'Select Date',
+                    style: AppTextStyle.poppinsNormalRegular16(
+                      color:
+                          _selectedDate != null
+                              ? AppColors.neutral
+                              : AppColors.neutral.withValues(alpha: 0.5),
+                    ),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _selectedDate != null
-                          ? _formatDate(_selectedDate!)
-                          : 'Select Date',
-                      style: AppTextStyle.poppinsNormalRegular16(
-                        color:
-                            _selectedDate != null
-                                ? AppColors.neutral
-                                : AppColors.neutral.withValues(alpha: 0.5),
-                      ),
-                    ),
-                    Icon(Icons.calendar_today, color: AppColors.primaryColor),
-                  ],
-                ),
+                  Icon(Icons.calendar_today, color: AppColors.primaryColor),
+                ],
               ),
             ),
-            SizedBox(height: 18),
-            Text(
-              'Gender',
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
-            ),
-            SizedBox(height: 4),
-            DropdownButtonFormField2<String>(
-              value: _selectedGender,
-              decoration: _inputDecoration('Select Gender'),
-              items:
-                  ['Male', 'Female', 'Other']
-                      .map(
-                        (gender) => DropdownMenuItem<String>(
-                          value: gender,
-                          child: Text(
-                            gender,
-                            style: AppTextStyle.poppinsNormalRegular16(
-                              color: AppColors.neutral,
-                            ),
+          ),
+          SizedBox(height: 18),
+          _buildLabel('Gender'),
+          SizedBox(height: 4),
+          DropdownButtonFormField2<String>(
+            value: _selectedGender,
+            decoration: _inputDecoration('Select Gender'),
+            items:
+                ['Male', 'Female', 'Other']
+                    .map(
+                      (gender) => DropdownMenuItem<String>(
+                        value: gender,
+                        child: Text(
+                          gender,
+                          style: AppTextStyle.poppinsNormalRegular16(
+                            color: AppColors.neutral,
                           ),
                         ),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedGender = value!;
-                });
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a gender';
-                }
-                return null;
-              },
-              isExpanded: true,
-              dropdownStyleData: DropdownStyleData(
-                maxHeight: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                offset: Offset(0, -5),
+                      ),
+                    )
+                    .toList(),
+            onChanged: (value) {
+              setState(() {
+                _selectedGender = value!;
+              });
+            },
+            validator:
+                (value) =>
+                    value == null || value.isEmpty
+                        ? 'Please select a gender'
+                        : null,
+            isExpanded: true,
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
               ),
-              iconStyleData: IconStyleData(
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  color: AppColors.primaryColor,
-                ),
-              ),
+              offset: Offset(0, -5),
             ),
-            SizedBox(height: 18),
-            Text(
-              'Email',
-              style: AppTextStyle.poppinsSmallRegular14(
-                color: AppColors.neutral,
-              ),
+            iconStyleData: IconStyleData(
+              icon: Icon(Icons.arrow_drop_down, color: AppColors.primaryColor),
             ),
-            SizedBox(height: 4),
-            TextFormField(
-              controller: _emailController,
-              decoration: _inputDecoration('Enter your email'),
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
-                }
-                if (!RegExp(
-                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                ).hasMatch(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                foregroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 56),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 2,
+          ),
+          SizedBox(height: 18),
+          _buildLabel('Email'),
+          SizedBox(height: 4),
+          TextFormField(
+            controller: _emailController,
+            decoration: _inputDecoration('Enter your email'),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
+              }
+              final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+              if (!emailRegex.hasMatch(value)) {
+                return 'Please enter a valid email';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 40),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColor,
+              foregroundColor: Colors.white,
+              minimumSize: Size(double.infinity, 56),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Profile updated successfully')),
-                  );
-                  // Implement save logic here
-                }
-              },
-              child: Text(
-                'Save Profile',
-                style: AppTextStyle.poppinsNormalRegular16(color: Colors.white),
-              ),
+              elevation: 2,
             ),
-            SizedBox(height: 20),
-          ],
-        ),
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: AppColors.primaryColor,
+                    content: Row(
+                      children: const [
+                        Icon(Icons.check, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text('Profile updated successfully'),
+                      ],
+                    ),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+                // Save logic here
+              }
+            },
+            child: Text(
+              'Save Profile',
+              style: AppTextStyle.poppinsNormalRegular16(color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
       ),
     );
   }
@@ -402,14 +387,13 @@ class _EditProfileContentState extends State<EditProfileContent> {
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
       ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.red, width: 2),
-      ),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Text(
+      text,
+      style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
     );
   }
 }
