@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recipe_app/core/data/about_us_data.dart';
 import 'package:recipe_app/core/services/api_service.dart';
@@ -58,13 +60,21 @@ class HomeController extends GetxController {
       birthDate.value = DateTime.parse(savedDate);
     }
 
-    final imagePath = LocalStorageService.instance.getString(
-      'profileImagePath',
-    );
-    if (imagePath != null) {
-      profileImage.value = File(imagePath);
-    }
+    // final imagePath = LocalStorageService.instance.getString(
+    //   'profileImagePath',
+    // );
+    // if (imagePath != null) {
+    //   profileImage.value = File(imagePath);
+    // }
 
+    final base64Image = LocalStorageService.instance.getString('profileImage');
+    if (base64Image != null) {
+      final bytes = base64Decode(base64Image);
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/profile_image.jpg');
+      await file.writeAsBytes(bytes);
+      profileImage.value = file;
+    }
     isLoading.value = false;
   }
 
@@ -82,11 +92,17 @@ class HomeController extends GetxController {
       );
     }
 
+    // if (profileImage.value != null) {
+    //   await LocalStorageService.instance.setString(
+    //     'profileImagePath',
+    //     profileImage.value!.path,
+    //   );
+    // }
+
     if (profileImage.value != null) {
-      await LocalStorageService.instance.setString(
-        'profileImagePath',
-        profileImage.value!.path,
-      );
+      final bytes = await profileImage.value!.readAsBytes();
+      final base64Image = base64Encode(bytes);
+      await LocalStorageService.instance.setString('profileImage', base64Image);
     }
     isLoading.value = false;
   }
