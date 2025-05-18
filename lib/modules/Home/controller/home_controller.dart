@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:recipe_app/core/data/about_us_data.dart';
+import 'package:recipe_app/core/data/data.dart';
 import 'package:recipe_app/core/services/api_service.dart';
 import 'package:recipe_app/core/services/local_service.dart';
 import 'package:recipe_app/core/string/string_con.dart';

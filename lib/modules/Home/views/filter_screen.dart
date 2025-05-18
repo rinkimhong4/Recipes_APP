@@ -12,7 +12,7 @@ class RecipeFilterController extends GetxController {
   void setCategory(String category) => selectedCategory.value = category;
 
   void applyFilters() {
-    // Implement filter logic
+    //  filter logic
     Get.back();
   }
 }
@@ -22,150 +22,182 @@ Future<dynamic> buildPopup() {
 
   return showModalBottomSheet(
     context: Get.context!,
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
     ),
     builder: (context) {
-      return Padding(
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Filter Recipes',
-              style: AppTextStyle.poppinsLargeBold20(color: AppColors.neutral),
+      final screenSize = MediaQuery.of(context).size;
+      final bool isSmallScreen = screenSize.height < 600;
+      final double maxHeight =
+          isSmallScreen ? screenSize.height : screenSize.height * 0.7;
+      final double padding = screenSize.width * 0.05;
+      final double fontScale = screenSize.width < 600 ? 0.9 : 1.0;
+
+      return Container(
+        constraints: BoxConstraints(
+          maxHeight: maxHeight,
+          minHeight:
+              isSmallScreen ? screenSize.height * 0.8 : screenSize.height * 0.5,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(padding).copyWith(
+              bottom: padding + MediaQuery.of(context).viewInsets.bottom,
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Time',
-              style: AppTextStyle.poppinsSmallBold14(color: AppColors.neutral),
-            ),
-            const SizedBox(height: 8),
-            Obx(
-              () => Row(
-                children: [
-                  _buildTimeChip('All', controller),
-                  const SizedBox(width: 8),
-                  _buildTimeChip('Popular', controller),
-                  const SizedBox(width: 8),
-                  _buildTimeChip('Oldest', controller),
-                  const SizedBox(width: 8),
-                  _buildTimeChip('Popularity', controller),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Rate',
-              style: AppTextStyle.poppinsSmallBold14(color: AppColors.neutral),
-            ),
-            const SizedBox(height: 8),
-            Obx(
-              () => Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children:
-                    [5, 4, 3, 2, 1].map((rating) {
-                      return FilterChip(
-                        showCheckmark: false,
-                        selectedColor: AppColors.primaryColor,
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('$rating'),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 18,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Filter Recipes',
+                  style: AppTextStyle.poppinsLargeBold20(
+                    color: AppColors.neutral,
+                  ).copyWith(fontSize: 20 * fontScale),
+                ),
+                SizedBox(height: padding * 0.5),
+                Text(
+                  'Time',
+                  style: AppTextStyle.poppinsSmallBold14(
+                    color: AppColors.neutral,
+                  ).copyWith(fontSize: 14 * fontScale),
+                ),
+                SizedBox(height: padding * 0.25),
+                Obx(
+                  () => Wrap(
+                    spacing: padding * 0.5,
+                    runSpacing: padding * 0.5,
+                    children: [
+                      _buildTimeChip('All', controller, fontScale),
+                      _buildTimeChip('Popular', controller, fontScale),
+                      _buildTimeChip('Oldest', controller, fontScale),
+                      _buildTimeChip('Popularity', controller, fontScale),
+                    ],
+                  ),
+                ),
+                SizedBox(height: padding * 0.5),
+                Text(
+                  'Rate',
+                  style: AppTextStyle.poppinsSmallBold14(
+                    color: AppColors.neutral,
+                  ).copyWith(fontSize: 14 * fontScale),
+                ),
+                SizedBox(height: padding * 0.25),
+                Obx(
+                  () => Wrap(
+                    spacing: padding * 0.5,
+                    runSpacing: padding * 0.5,
+                    children:
+                        [5, 4, 3, 2, 1].map((rating) {
+                          return FilterChip(
+                            showCheckmark: false,
+                            selectedColor: AppColors.primaryColor,
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('$rating'),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 18 * fontScale,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        labelStyle: AppTextStyle.poppinsSmallRegular14(
-                          color:
-                              controller.selectedRating.value == rating
-                                  ? Colors.white
-                                  : AppColors.neutral,
-                        ),
-                        selected: controller.selectedRating.value == rating,
-                        onSelected: (val) {
-                          controller.setRating(val ? rating : 0);
-                        },
-                        shape: const StadiumBorder(
-                          side: BorderSide(
-                            color: AppColors.primaryColor,
-                            width: 1,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Category',
-              style: AppTextStyle.poppinsSmallBold14(color: AppColors.neutral),
-            ),
-            const SizedBox(height: 8),
-            Obx(
-              () => Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children:
-                    ['All', 'Breakfast', 'Lunch', 'Dinner', 'Dessert'].map((
-                      category,
-                    ) {
-                      return FilterChip(
-                        showCheckmark: false,
-                        selectedColor: AppColors.primaryColor,
-                        label: Text(category),
-                        labelStyle: AppTextStyle.poppinsSmallRegular14(
-                          color:
-                              controller.selectedCategory.value == category
-                                  ? Colors.white
-                                  : AppColors.neutral,
-                        ),
-                        selected: controller.selectedCategory.value == category,
-                        onSelected: (val) {
-                          controller.setCategory(val ? category : 'All');
-                        },
-                        shape: const StadiumBorder(
-                          side: BorderSide(
-                            color: AppColors.primaryColor,
-                            width: 1,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: controller.applyFilters,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                            labelStyle: AppTextStyle.poppinsSmallRegular14(
+                              color:
+                                  controller.selectedRating.value == rating
+                                      ? Colors.white
+                                      : AppColors.neutral,
+                            ).copyWith(fontSize: 14 * fontScale),
+                            selected: controller.selectedRating.value == rating,
+                            onSelected: (val) {
+                              controller.setRating(val ? rating : 0);
+                            },
+                            shape: const StadiumBorder(
+                              side: BorderSide(
+                                color: AppColors.primaryColor,
+                                width: 1,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ),
-                child: Text(
-                  'Apply',
-                  style: AppTextStyle.poppinsSmallRegular14(
-                    color: Colors.white,
+                SizedBox(height: padding * 0.5),
+                Text(
+                  'Category',
+                  style: AppTextStyle.poppinsSmallBold14(
+                    color: AppColors.neutral,
+                  ).copyWith(fontSize: 14 * fontScale),
+                ),
+                SizedBox(height: padding * 0.25),
+                Obx(
+                  () => Wrap(
+                    spacing: padding * 0.5,
+                    runSpacing: padding * 0.5,
+                    children:
+                        ['All', 'Breakfast', 'Lunch', 'Dinner', 'Dessert'].map((
+                          category,
+                        ) {
+                          return FilterChip(
+                            showCheckmark: false,
+                            selectedColor: AppColors.primaryColor,
+                            label: Text(category),
+                            labelStyle: AppTextStyle.poppinsSmallRegular14(
+                              color:
+                                  controller.selectedCategory.value == category
+                                      ? Colors.white
+                                      : AppColors.neutral,
+                            ).copyWith(fontSize: 14 * fontScale),
+                            selected:
+                                controller.selectedCategory.value == category,
+                            onSelected: (val) {
+                              controller.setCategory(val ? category : 'All');
+                            },
+                            shape: const StadiumBorder(
+                              side: BorderSide(
+                                color: AppColors.primaryColor,
+                                width: 1,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ),
-              ),
+                SizedBox(height: padding),
+                FractionallySizedBox(
+                  widthFactor: 1,
+                  child: ElevatedButton(
+                    onPressed: controller.applyFilters,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: padding * 0.5),
+                    ),
+                    child: Text(
+                      'Apply',
+                      style: AppTextStyle.poppinsSmallRegular14(
+                        color: Colors.white,
+                      ).copyWith(fontSize: 14 * fontScale),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       );
     },
   );
 }
 
-Widget _buildTimeChip(String label, RecipeFilterController controller) {
+Widget _buildTimeChip(
+  String label,
+  RecipeFilterController controller,
+  double fontScale,
+) {
   return FilterChip(
     showCheckmark: false,
     selectedColor: AppColors.primaryColor,
@@ -175,12 +207,12 @@ Widget _buildTimeChip(String label, RecipeFilterController controller) {
           controller.selectedTimeFilter.value == label
               ? Colors.white
               : AppColors.neutral,
-    ),
+    ).copyWith(fontSize: 14 * fontScale),
     selected: controller.selectedTimeFilter.value == label,
     onSelected: (val) {
       controller.setTimeFilter(val ? label : 'All');
     },
-    shape: const StadiumBorder(
+    shape: StadiumBorder(
       side: BorderSide(color: AppColors.primaryColor, width: 1),
     ),
   );
