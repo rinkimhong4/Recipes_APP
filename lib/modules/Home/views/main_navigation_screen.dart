@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/function/responsive/main_responsive.dart';
+import 'package:recipe_app/modules/Home/views/inbox/inbox_screen.dart';
+import 'package:recipe_app/modules/Home/views/profile/profile_binding.dart';
 import 'package:recipe_app/modules/Home/views/profile/profile_screen_small.dart';
 import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_medium.dart';
 import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_small.dart';
@@ -16,18 +18,19 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedPage = 0;
-  final List<Widget> _listPages = [];
+  final List _listPages = [];
 
   @override
   void initState() {
     super.initState();
+    ProfileBinding().dependencies();
     _listPages.addAll([
       MainResponsive(small: HomeScreenSmall(), medium: HomeScreenMedium()),
       MainResponsive(
         small: SaveRecipeScreenSmall(),
         medium: SaveRecipeScreenMedium(),
       ),
-      // const Center(child: Text('Notifications')),
+      InboxScreen(),
       ProfileScreenSmall(),
     ]);
   }

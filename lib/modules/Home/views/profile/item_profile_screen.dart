@@ -10,10 +10,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/controller/home_controller.dart';
+import 'package:recipe_app/modules/Home/views/profile/profile_controller.dart';
 import '../../models/about_us_model.dart';
 
-class ItemProfileScreen extends StatelessWidget {
+class ItemProfileScreen extends GetView<ProfileController> {
   final int index;
   final String title;
   const ItemProfileScreen({
@@ -60,34 +60,14 @@ class EditProfileContent extends StatefulWidget {
 class _EditProfileContentState extends State<EditProfileContent> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
-  late final HomeController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    try {
-      controller = Get.find<HomeController>();
-      if (!['Male', 'Female', 'Other'].contains(controller.gender.value)) {
-        controller.gender.value = '';
-      }
-    } catch (e) {
-      controller = Get.put(HomeController());
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  final ProfileController controller = Get.find<ProfileController>();
 
   Future<void> _pickImage() async {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        controller.profileImage.value = File(pickedFile.path);
-      } else {
-        ScaffoldMessenger.of(context);
-      }
+      pickedFile != null
+          ? controller.profileImage.value = File(pickedFile.path)
+          : ScaffoldMessenger.of(context);
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -470,7 +450,7 @@ class AboutUsContent extends StatefulWidget {
 }
 
 class _AboutUsContentState extends State<AboutUsContent> {
-  final HomeController controller = Get.find<HomeController>();
+  final ProfileController controller = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -595,7 +575,7 @@ class ContactUsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.find<HomeController>();
+    final ProfileController controller = Get.find<ProfileController>();
 
     return Scaffold(
       body: Obx(
@@ -694,7 +674,7 @@ class ContactUsContent extends StatelessWidget {
 // ===========================================================================
 class TermOfUseContent extends StatelessWidget {
   TermOfUseContent({super.key});
-  final HomeController controller = Get.find<HomeController>();
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {

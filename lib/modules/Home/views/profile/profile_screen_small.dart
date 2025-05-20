@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/controller/home_controller.dart';
 import 'package:recipe_app/modules/Home/views/profile/format_phone_number.dart';
 import 'package:recipe_app/modules/Home/views/profile/item_profile_screen.dart';
+import 'package:recipe_app/modules/Home/views/profile/profile_controller.dart';
 
-class ProfileScreenSmall extends StatelessWidget {
+class ProfileScreenSmall extends GetView<ProfileController> {
   ProfileScreenSmall({super.key});
 
   final List<Map<String, dynamic>> profileOptions = [
@@ -26,7 +26,7 @@ class ProfileScreenSmall extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    final controller = Get.find<ProfileController>();
     return Column(
       children: [
         Container(
