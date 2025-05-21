@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
+import 'package:shimmer/shimmer.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -11,6 +12,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
+  bool _isLoading = true;
 
   final List<Map<String, dynamic>> notificationList = [
     {
@@ -76,6 +78,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
         });
       }
     });
+
+    //
+    Future.delayed(Duration(milliseconds: 400), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
@@ -103,19 +112,61 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body: Container(
         color: Colors.white,
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: notificationList.length,
-          itemBuilder: (context, index) {
-            final notification = notificationList[index];
-            return NotificationItem(
-              imageUrl: notification['imageUrl'],
-              title: notification['title'],
-              subtitle: notification['subtitle'],
-              onTap: () {},
-            );
-          },
-        ),
+        child:
+            _isLoading
+                ? _buildShimmer
+                : ListView.builder(
+                  controller: _scrollController,
+                  itemCount: notificationList.length,
+                  itemBuilder: (context, index) {
+                    final notification = notificationList[index];
+                    return NotificationItem(
+                      imageUrl: notification['imageUrl'],
+                      title: notification['title'],
+                      subtitle: notification['subtitle'],
+                      onTap: () {},
+                    );
+                  },
+                ),
+      ),
+    );
+  }
+
+  get _buildShimmer {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 6,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                CircleAvatar(radius: 36),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 10.0,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 8.0),
+                      Container(
+                        width: double.infinity,
+                        height: 8.0,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -148,11 +199,19 @@ class NotificationItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  // backgroundImage: NetworkImage(imageUrl),
-                  backgroundImage: AssetImage(imageUrl),
-                  backgroundColor: Colors.amber,
-                  radius: 25,
+                // CircleAvatar(
+                //   backgroundImage: AssetImage(imageUrl),
+                //   backgroundColor: AppColors.primaryColor,
+                //   radius: 25,
+                // ),
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Image.asset(imageUrl, fit: BoxFit.cover),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -161,15 +220,16 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                        style: AppTextStyle.poppinsSmallBold14(
+                          color: AppColors.neutral,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: const TextStyle(color: Colors.grey),
+                        style: AppTextStyle.poppinsSmallRegular12(
+                          color: AppColors.neutral[400],
+                        ),
                       ),
                     ],
                   ),
@@ -178,7 +238,7 @@ class NotificationItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 14),
+        SizedBox(height: 8),
         Container(height: 1, width: 350, color: Colors.grey.shade300),
       ],
     );

@@ -6,17 +6,49 @@ import 'package:recipe_app/modules/Home/controller/home_controller.dart';
 import 'package:recipe_app/modules/Home/widgets/save_recipe_card.dart';
 import 'package:recipe_app/modules/item/item_detail.dart';
 
-class SaveRecipeScreenSmall extends StatelessWidget {
+class SaveRecipeScreenSmall extends StatefulWidget {
   const SaveRecipeScreenSmall({super.key});
+
+  @override
+  State<SaveRecipeScreenSmall> createState() => _SaveRecipeScreenSmallState();
+}
+
+class _SaveRecipeScreenSmallState extends State<SaveRecipeScreenSmall> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      final isScrolledDown = _scrollController.offset > 10;
+      if (isScrolledDown != _isScrolled) {
+        setState(() {
+          _isScrolled = isScrolledDown;
+        });
+      }
+    });
+  }
+
+  Color get appBarColor => _isScrolled ? AppColors.primaryColor : Colors.white;
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("Saved Recipes"),
-        backgroundColor: AppColors.neutral[100],
+        title: Text(
+          "Saved Recipes",
+          style: TextStyle(color: _isScrolled ? Colors.white : Colors.black),
+        ),
+        backgroundColor: appBarColor,
+        elevation: _isScrolled ? 4 : 0,
       ),
       body: Container(
         color: Colors.white,
@@ -57,6 +89,7 @@ class SaveRecipeScreenSmall extends StatelessWidget {
                     ),
                     onRefresh: controller.onRefresh,
                     child: ListView.builder(
+                      controller: _scrollController,
                       padding: EdgeInsets.all(12),
                       itemCount: controller.recipeModels.recipes?.length ?? 0,
                       itemBuilder: (context, index) {
