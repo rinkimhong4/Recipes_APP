@@ -228,7 +228,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
             return TextFormField(
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
               ],
               initialValue: controller.phone.value,
               onChanged: (value) => controller.phone.value = value,

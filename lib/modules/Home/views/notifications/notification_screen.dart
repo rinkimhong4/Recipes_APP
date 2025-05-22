@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
+import 'package:recipe_app/modules/Home/views/notifications/new_recipe_notifications.dart';
 import 'package:shimmer/shimmer.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -13,59 +14,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
   bool _isLoading = true;
-
-  final List<Map<String, dynamic>> notificationList = [
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'New Message',
-      'subtitle': 'You received a message from Alice.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Order Shipped',
-      'subtitle': 'Your order #1234 has been shipped.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Payment Received',
-      'subtitle': 'You received \$250 from Bob.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Event Reminder',
-      'subtitle': 'Meeting with client at 10:00 AM.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Friend Request',
-      'subtitle': 'Charlie sent you a friend request.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'App Update',
-      'subtitle': 'Version 2.1 is now available.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Promotion',
-      'subtitle': 'Get 20% off your next order!',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Task Completed',
-      'subtitle': 'You finished the project milestone.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Security Alert',
-      'subtitle': 'New login from unknown device.',
-    },
-    {
-      'imageUrl': 'assets/images/profile_app.png',
-      'title': 'Subscription Expiring',
-      'subtitle': 'Your plan expires in 3 days.',
-    },
-  ];
 
   @override
   void initState() {
@@ -144,14 +92,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Row(
               children: [
                 CircleAvatar(radius: 36),
-                const SizedBox(width: 16.0),
+                SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 10.0,
+                        height: 20,
                         color: Colors.white,
                       ),
                       const SizedBox(height: 8.0),
@@ -199,21 +147,20 @@ class NotificationItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CircleAvatar(
-                //   backgroundImage: AssetImage(imageUrl),
-                //   backgroundColor: AppColors.primaryColor,
-                //   radius: 25,
-                // ),
                 Container(
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(30),
+                    // border: Border.all(
+                    //   color: AppColors.secondaryColor,
+                    //   width: 1,
+                    // ),
                   ),
                   child: Image.asset(imageUrl, fit: BoxFit.cover),
                 ),
-                SizedBox(width: 16),
+                SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +174,7 @@ class NotificationItem extends StatelessWidget {
                       SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: AppTextStyle.poppinsSmallRegular12(
+                        style: AppTextStyle.poppinsSmallerRegular11(
                           color: AppColors.neutral[400],
                         ),
                       ),

@@ -40,49 +40,68 @@ class ProfileController extends GetxController {
   final Rx<DateTime?> birthDate = DateTime.now().obs;
   final Rx<File?> profileImage = Rx<File?>(null);
 
-  Future<void> _loadSavedProfile() async {
-    isLoading.value = true;
-
-    name.value = LocalStorageService.instance.getString('name') ?? '';
-    phone.value = LocalStorageService.instance.getString('phone') ?? '';
-    email.value = LocalStorageService.instance.getString('email') ?? '';
-    gender.value = LocalStorageService.instance.getString('gender') ?? 'Gender';
-    final savedDate = LocalStorageService.instance.getString('birthDate');
-    if (savedDate != null) {
-      birthDate.value = DateTime.parse(savedDate);
-    }
-
-    final base64Image = LocalStorageService.instance.getString('profileImage');
-    if (base64Image != null) {
-      final bytes = base64Decode(base64Image);
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/profile_image.jpg');
-      await file.writeAsBytes(bytes);
-      profileImage.value = file;
-    }
-    isLoading.value = false;
-  }
-
   Future<void> saveProfile() async {
     isLoading.value = true;
-    await LocalStorageService.instance.setString('name', name.value);
-    await LocalStorageService.instance.setString('phone', phone.value);
-    await LocalStorageService.instance.setString('email', email.value);
-    await LocalStorageService.instance.setString('gender', gender.value);
+    try {
+      await LocalStorageService.instance.setString('name', name.value);
+      await LocalStorageService.instance.setString('phone', phone.value);
+      await LocalStorageService.instance.setString('email', email.value);
+      await LocalStorageService.instance.setString('gender', gender.value);
 
-    if (birthDate.value != null) {
-      await LocalStorageService.instance.setString(
-        'birthDate',
-        birthDate.value!.toIso8601String(),
+      if (birthDate.value != null) {
+        await LocalStorageService.instance.setString(
+          'birthDate',
+          birthDate.value!.toIso8601String(),
+        );
+      }
+
+      if (profileImage.value != null) {
+        final bytes = await profileImage.value!.readAsBytes();
+        final base64Image = base64Encode(bytes);
+        await LocalStorageService.instance.setString(
+          'profileImage',
+          base64Image,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error saving profile: $e');
+      // Handle error appropriately
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _loadSavedProfile() async {
+    isLoading.value = true;
+    try {
+      name.value = LocalStorageService.instance.getString('name') ?? '';
+      phone.value = LocalStorageService.instance.getString('phone') ?? '';
+      email.value = LocalStorageService.instance.getString('email') ?? '';
+      gender.value =
+          LocalStorageService.instance.getString('gender') ?? 'Gender';
+
+      final savedDate = LocalStorageService.instance.getString('birthDate');
+      if (savedDate != null) {
+        birthDate.value = DateTime.parse(savedDate);
+      }
+
+      final base64Image = LocalStorageService.instance.getString(
+        'profileImage',
       );
+      if (base64Image != null && base64Image.isNotEmpty) {
+        final bytes = base64Decode(base64Image);
+        final tempDir = await getTemporaryDirectory();
+        final file = File(
+          '${tempDir.path}/profile_image_${DateTime.now().millisecondsSinceEpoch}.jpg',
+        );
+        await file.writeAsBytes(bytes);
+        profileImage.value = file;
+      }
+    } catch (e) {
+      debugPrint('Error loading profile: $e');
+    } finally {
+      isLoading.value = false;
     }
-
-    if (profileImage.value != null) {
-      final bytes = await profileImage.value!.readAsBytes();
-      final base64Image = base64Encode(bytes);
-      await LocalStorageService.instance.setString('profileImage', base64Image);
-    }
-    isLoading.value = false;
   }
 
   AboutUsModels aboutUsModels = AboutUsModels();
