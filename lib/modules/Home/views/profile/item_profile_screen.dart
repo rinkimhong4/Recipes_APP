@@ -39,7 +39,20 @@ class ItemProfileScreen extends GetView<ProfileController> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: Text(title, style: AppTextStyle.poppinsLargeRegular20()),
-        leading: BackButton(color: Colors.white),
+        leading: Obx(
+          () =>
+              index != 0
+                  ? BackButton(color: Colors.white)
+                  : Visibility(
+                    visible:
+                        controller.name.value.isNotEmpty &&
+                        controller.phone.value.isNotEmpty &&
+                        controller.email.value.isNotEmpty &&
+                        controller.gender.value.isNotEmpty &&
+                        controller.birthDate.value != null,
+                    child: const BackButton(color: Colors.white),
+                  ),
+        ),
       ),
       body: Center(child: content),
     );
