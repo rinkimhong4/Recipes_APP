@@ -81,9 +81,6 @@ class ProfileScreenSmall extends GetView<ProfileController> {
                             ? FileImage(controller.profileImage.value!)
                             : AssetImage('assets/images/hong_profile.png')
                                 as ImageProvider,
-                    // AssetImage(
-                    //   'assets/images/hong_profile.png',
-                    // ),
                   ),
                 ),
               ),

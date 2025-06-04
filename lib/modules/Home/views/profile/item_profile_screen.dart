@@ -24,37 +24,46 @@ class ItemProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content =
-        index == 0
-            ? EditProfileContent()
-            : index == 1
-            ? AboutUsContent()
-            : index == 2
-            ? ContactUsContent()
-            : index == 3
-            ? TermOfUseContent()
-            : Text("Unknown Option");
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: Text(title, style: AppTextStyle.poppinsLargeRegular20()),
-        leading: Obx(
-          () =>
-              index != 0
-                  ? BackButton(color: Colors.white)
-                  : Visibility(
-                    visible:
-                        controller.name.value.isNotEmpty &&
-                        controller.phone.value.isNotEmpty &&
-                        controller.email.value.isNotEmpty &&
-                        controller.gender.value.isNotEmpty &&
-                        controller.birthDate.value != null,
-                    child: const BackButton(color: Colors.white),
-                  ),
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.primaryColor, const Color(0xFF0d6f59)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
         ),
+        title: Text(title, style: AppTextStyle.poppinsLargeRegular20()),
+        leadingWidth: 56,
+        leading: SizedBox(
+          width: 56,
+          height: 56,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
+            onPressed: () {
+              print('Back button tapped'); // Debug log
+              Navigator.pop(context);
+            },
+            tooltip: 'Back',
+          ),
+        ),
+        elevation: 0,
       ),
-      body: Center(child: content),
+      body: SafeArea(
+        child:
+            index == 0
+                ? const EditProfileContent()
+                : index == 1
+                ? const AboutUsContent()
+                : index == 2
+                ? ContactUsContent()
+                : index == 3
+                ? const TermOfUseContent()
+                : const Center(child: Text("Unknown Option")),
+      ),
     );
   }
 }
@@ -78,9 +87,13 @@ class _EditProfileContentState extends State<EditProfileContent> {
   Future<void> _pickImage() async {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      pickedFile != null
-          ? controller.profileImage.value = File(pickedFile.path)
-          : ScaffoldMessenger.of(context);
+      if (pickedFile != null) {
+        controller.profileImage.value = File(pickedFile.path);
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('No image selected')));
+      }
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -125,44 +138,39 @@ class _EditProfileContentState extends State<EditProfileContent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Obx(
-            () =>
-                controller.isLoading.value
-                    ? SizedBox()
-                    : controller.errorMessage.value.isNotEmpty
-                    ? Center(
-                      child: Text(
-                        controller.errorMessage.value,
-                        style: AppTextStyle.poppinsSmallRegular14(
-                          color: AppColors.neutral,
-                        ),
-                        textAlign: TextAlign.center,
+      child: Obx(
+        () =>
+            controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width,
                       ),
-                    )
-                    : SmartRefresher(
-                      controller: controller.refreshController.value,
-                      enablePullDown: true,
-                      header: WaterDropHeader(
-                        waterDropColor: AppColors.primaryColor,
-                      ),
-                      onRefresh: controller.onRefresh,
-                      child: SingleChildScrollView(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: _buildEditForm(),
-                          ),
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: _buildEditForm(),
                       ),
                     ),
-          ),
-        ),
+                  ),
+                ),
       ),
     );
   }
@@ -173,7 +181,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Center(
             child: Obx(() {
               return Stack(
@@ -192,7 +200,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
                         backgroundImage:
                             controller.profileImage.value != null
                                 ? FileImage(controller.profileImage.value!)
-                                : AssetImage('assets/images/hong_profile.png')
+                                : const AssetImage(
+                                      'assets/images/hong_profile.png',
+                                    )
                                     as ImageProvider,
                       ),
                     ),
@@ -200,7 +210,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
                   GestureDetector(
                     onTap: _pickImage,
                     child: Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppColors.primaryColor,
                         shape: BoxShape.circle,
@@ -208,20 +218,24 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 6,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: Icon(Icons.edit, color: Colors.white, size: 20),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
               );
             }),
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
           _buildLabel('Name'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Obx(() {
             return TextFormField(
               initialValue: controller.name.value,
@@ -234,9 +248,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           : null,
             );
           }),
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
           _buildLabel('Phone Number'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Obx(() {
             return TextFormField(
               inputFormatters: [
@@ -256,14 +270,17 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           : null,
             );
           }),
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
           _buildLabel('Date of Birth'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           GestureDetector(
             onTap: _pickDate,
             child: Obx(() {
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -274,7 +291,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 8,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -298,9 +315,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
               );
             }),
           ),
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
           _buildLabel('Gender'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Obx(() {
             final validGender =
                 ['Male', 'Female', 'Other'].contains(controller.gender.value)
@@ -337,7 +354,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                offset: Offset(0, -5),
+                offset: const Offset(0, -5),
               ),
               iconStyleData: IconStyleData(
                 icon: Icon(
@@ -347,9 +364,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
               ),
             );
           }),
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
           _buildLabel('Email'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Obx(() {
             return TextFormField(
               initialValue: controller.email.value,
@@ -368,13 +385,13 @@ class _EditProfileContentState extends State<EditProfileContent> {
               },
             );
           }),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Obx(() {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 56),
+                minimumSize: const Size(double.infinity, 56),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -389,21 +406,23 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: AppColors.primaryColor,
-                              content: Row(
+                              content: const Row(
                                 children: [
                                   Icon(Icons.check, color: Colors.white),
                                   SizedBox(width: 8),
                                   Text('Profile updated successfully'),
                                 ],
                               ),
-                              duration: Duration(seconds: 1),
+                              duration: const Duration(seconds: 1),
                             ),
                           );
+                          // Ensure navigation back after saving
+                          Navigator.pop(context);
                         }
                       },
               child:
                   controller.isLoading.value
-                      ? CircularProgressIndicator(color: Colors.white)
+                      ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
                         'Save Profile',
                         style: AppTextStyle.poppinsNormalRegular16(
@@ -412,7 +431,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
                       ),
             );
           }),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -426,7 +445,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
       ),
       filled: true,
       fillColor: Colors.white,
-      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: AppColors.neutral),
@@ -451,54 +470,46 @@ class _EditProfileContentState extends State<EditProfileContent> {
     );
   }
 }
+
 // ===========================================================================
 //                                AboutUsContent
 // ===========================================================================
 
-class AboutUsContent extends StatefulWidget {
+class AboutUsContent extends StatelessWidget {
   const AboutUsContent({super.key});
 
   @override
-  State<AboutUsContent> createState() => _AboutUsContentState();
-}
-
-class _AboutUsContentState extends State<AboutUsContent> {
-  final ProfileController controller = Get.find<ProfileController>();
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(
-        () =>
-            controller.isLoading.value
-                ? SizedBox()
-                : controller.errorMessage.value.isNotEmpty
-                ? Center(
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: AppTextStyle.poppinsSmallRegular14(
-                      color: AppColors.neutral,
-                    ),
-                    textAlign: TextAlign.center,
+    final ProfileController controller = Get.find<ProfileController>();
+    return Obx(
+      () =>
+          controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : controller.errorMessage.value.isNotEmpty
+              ? Center(
+                child: Text(
+                  controller.errorMessage.value,
+                  style: AppTextStyle.poppinsSmallRegular14(
+                    color: AppColors.neutral,
                   ),
-                )
-                : SmartRefresher(
-                  controller: controller.refreshController.value,
-                  header: WaterDropHeader(
-                    waterDropColor: AppColors.primaryColor,
-                  ),
-                  onRefresh: controller.onRefresh,
-                  child: SingleChildScrollView(
-                    child: _buildBody(controller.aboutUsModels),
-                  ),
+                  textAlign: TextAlign.center,
                 ),
-      ),
+              )
+              : SmartRefresher(
+                controller: controller.refreshController.value,
+                enablePullDown: true,
+                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
+                onRefresh: controller.onRefresh,
+                child: SingleChildScrollView(
+                  child: _buildBody(controller.aboutUsModels),
+                ),
+              ),
     );
   }
 
   Widget _buildBody(AboutUsModels aboutUsModels) {
     return Padding(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -506,15 +517,13 @@ class _AboutUsContentState extends State<AboutUsContent> {
             _buildSectionTitle("About Us"),
             ...aboutUsModels.about!.description!.map(_buildParagraph),
           ],
-
           if (aboutUsModels.mission?.description?.isNotEmpty ?? false) ...[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             _buildSectionTitle(aboutUsModels.mission!.title ?? "Our Mission"),
             _buildParagraph(aboutUsModels.mission!.description!),
           ],
-
           if (aboutUsModels.features?.items?.isNotEmpty ?? false) ...[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             _buildSectionTitle(aboutUsModels.features!.title ?? "Features"),
             ...aboutUsModels.features!.items!.map(
               (item) => Column(
@@ -523,21 +532,20 @@ class _AboutUsContentState extends State<AboutUsContent> {
                   _buildParagraph(item.name ?? ""),
                   if (item.description != null)
                     Padding(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 4),
                       child: _buildParagraph(
                         item.description is List<String>
                             ? (item.description as List<String>).join('\n')
                             : item.description.toString(),
                       ),
                     ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                 ],
               ),
             ),
           ],
-
           if (aboutUsModels.whyChooseUs?.description?.isNotEmpty ?? false) ...[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             _buildSectionTitle(
               aboutUsModels.whyChooseUs!.title ?? "Why Choose Us",
             ),
@@ -557,7 +565,7 @@ class _AboutUsContentState extends State<AboutUsContent> {
 
   Widget _buildParagraph(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         text,
         style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
@@ -589,38 +597,33 @@ class ContactUsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find<ProfileController>();
-
-    return Scaffold(
-      body: Obx(
-        () =>
-            controller.isLoading.value
-                ? SizedBox()
-                : controller.errorMessage.value.isNotEmpty
-                ? Center(
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: AppTextStyle.poppinsSmallRegular14(
-                      color: AppColors.neutral,
-                    ),
-                    textAlign: TextAlign.center,
+    return Obx(
+      () =>
+          controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : controller.errorMessage.value.isNotEmpty
+              ? Center(
+                child: Text(
+                  controller.errorMessage.value,
+                  style: AppTextStyle.poppinsSmallRegular14(
+                    color: AppColors.neutral,
                   ),
-                )
-                : SmartRefresher(
-                  controller: controller.refreshController.value,
-                  enablePullDown: true,
-                  header: WaterDropHeader(
-                    waterDropColor: AppColors.primaryColor,
-                  ),
-                  onRefresh: controller.onRefresh,
-                  child: SingleChildScrollView(child: _buildBody),
+                  textAlign: TextAlign.center,
                 ),
-      ),
+              )
+              : SmartRefresher(
+                controller: controller.refreshController.value,
+                enablePullDown: true,
+                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
+                onRefresh: controller.onRefresh,
+                child: SingleChildScrollView(child: _buildBody),
+              ),
     );
   }
 
-  get _buildBody {
+  Widget get _buildBody {
     return Padding(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -628,18 +631,18 @@ class ContactUsContent extends StatelessWidget {
             "Contact Us",
             style: AppTextStyle.poppinsMediumBold18(color: AppColors.neutral),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Text(
             "Have questions, feedback, or need support? We're here to help! "
             "Reach out to us anytime and our team will get back to you as soon as possible.",
             style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Column(
             children: List.generate(
               contactItems.length,
               (index) => Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 24),
+                padding: const EdgeInsets.only(top: 16, bottom: 24),
                 child: Row(
                   children: [
                     Icon(
@@ -647,7 +650,7 @@ class ContactUsContent extends StatelessWidget {
                       color: AppColors.primaryColor,
                       size: 34,
                     ),
-                    SizedBox(width: 14),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: Text(
                         contactItems[index]['title'],
@@ -661,7 +664,7 @@ class ContactUsContent extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Container(
             height: 200,
             width: double.infinity,
@@ -671,9 +674,10 @@ class ContactUsContent extends StatelessWidget {
               imageUrl:
                   'https://www.google.com/maps/vt/data=k7MNbRH56k09vKFuNer-e6GzGbcpNkt39OScVpzRMk05LCW5qRv7JGdP0NVWbbI1SicWq4OIcoF4zG0rjiheFjbmZc0SBYi3G9ubO3-tzR312SqipvV7LPpEClFvWgj4QfggapEGWLdJUOmIDoE0GFg2okXdnPCc6TMGxIT3IOT6j7RUFwwx5Ogc-vdtHJy0siulDCOosaghBYFJmM2Vgj327usfxKlmcnm168A8IEDwY-fkq4KZzsaNcxaX9pXMIBHWRLUKCXFzwDlMPSfJcuUlw9-LBhx2x8466Q',
               fit: BoxFit.cover,
-              placeholder: (context, url) => Center(child: SizedBox()),
+              placeholder: (context, url) => const Center(child: SizedBox()),
               errorWidget:
-                  (context, url, error) => Center(child: Icon(Icons.error)),
+                  (context, url, error) =>
+                      const Center(child: Icon(Icons.error)),
             ),
           ),
         ],
@@ -685,84 +689,80 @@ class ContactUsContent extends StatelessWidget {
 // ===========================================================================
 //                                TermOfUseContent
 // ===========================================================================
+
 class TermOfUseContent extends StatelessWidget {
-  TermOfUseContent({super.key});
-  final ProfileController controller = Get.find<ProfileController>();
+  const TermOfUseContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(
-        () =>
-            controller.isLoading.value
-                ? SizedBox()
-                : controller.errorMessage.value.isNotEmpty
-                ? Center(
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: AppTextStyle.poppinsSmallRegular14(
-                      color: AppColors.neutral,
-                    ),
-                    textAlign: TextAlign.center,
+    final ProfileController controller = Get.find<ProfileController>();
+    return Obx(
+      () =>
+          controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : controller.errorMessage.value.isNotEmpty
+              ? Center(
+                child: Text(
+                  controller.errorMessage.value,
+                  style: AppTextStyle.poppinsSmallRegular14(
+                    color: AppColors.neutral,
                   ),
-                )
-                : SmartRefresher(
-                  controller: controller.refreshController.value,
-                  enablePullDown: true,
-                  header: WaterDropHeader(
-                    waterDropColor: AppColors.primaryColor,
-                  ),
-                  onRefresh: controller.onRefresh,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSectionTitle("Terms of Use"),
-                        SizedBox(height: 24),
-                        _buildParagraph(
-                          "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
-                        ),
-                        SizedBox(height: 18),
-                        _buildSectionTitle("1. Use of Content"),
-                        SizedBox(height: 6),
-                        _buildParagraph(
-                          "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
-                        ),
-                        SizedBox(height: 18),
-                        _buildSectionTitle("2. User Conduct"),
-                        SizedBox(height: 6),
-                        _buildParagraph(
-                          "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
-                        ),
-                        SizedBox(height: 18),
-                        _buildSectionTitle("3. Privacy"),
-                        SizedBox(height: 6),
-                        _buildParagraph(
-                          "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
-                        ),
-                        SizedBox(height: 18),
-                        _buildSectionTitle("4. Disclaimer"),
-                        SizedBox(height: 6),
-                        _buildParagraph(
-                          "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
-                        ),
-                        SizedBox(height: 18),
-                        _buildSectionTitle("5. Changes to Terms"),
-                        SizedBox(height: 6),
-                        _buildParagraph(
-                          "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
-                        ),
-                        SizedBox(height: 24),
-                        _buildParagraph(
-                          "If you have any questions about these terms, please contact us through the Contact Us section.",
-                        ),
-                      ],
-                    ),
+                  textAlign: TextAlign.center,
+                ),
+              )
+              : SmartRefresher(
+                controller: controller.refreshController.value,
+                enablePullDown: true,
+                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
+                onRefresh: controller.onRefresh,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSectionTitle("Terms of Use"),
+                      const SizedBox(height: 24),
+                      _buildParagraph(
+                        "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSectionTitle("1. Use of Content"),
+                      const SizedBox(height: 6),
+                      _buildParagraph(
+                        "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSectionTitle("2. User Conduct"),
+                      const SizedBox(height: 6),
+                      _buildParagraph(
+                        "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSectionTitle("3. Privacy"),
+                      const SizedBox(height: 6),
+                      _buildParagraph(
+                        "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSectionTitle("4. Disclaimer"),
+                      const SizedBox(height: 6),
+                      _buildParagraph(
+                        "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSectionTitle("5. Changes to Terms"),
+                      const SizedBox(height: 6),
+                      _buildParagraph(
+                        "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
+                      ),
+                      const SizedBox(height: 24),
+                      _buildParagraph(
+                        "If you have any questions about these terms, please contact us through the Contact Us section.",
+                      ),
+                    ],
                   ),
                 ),
-      ),
+              ),
     );
   }
 
@@ -775,7 +775,7 @@ class TermOfUseContent extends StatelessWidget {
 
   Widget _buildParagraph(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         text,
         style: AppTextStyle.poppinsSmallRegular14(color: AppColors.neutral),
