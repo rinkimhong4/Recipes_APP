@@ -44,7 +44,7 @@ class ItemProfileScreen extends GetView<ProfileController> {
           child: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
             onPressed: () {
-              print('Back button tapped'); // Debug log
+              // print('Back button tapped'); // Debug log
               Navigator.pop(context);
             },
             tooltip: 'Back',
