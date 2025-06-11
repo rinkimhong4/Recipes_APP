@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/views/profile/format_phone_number.dart';
 import 'package:recipe_app/modules/Home/views/profile/item_profile_screen.dart';
-import 'package:recipe_app/modules/Home/views/profile/profile_controller.dart';
+import 'package:recipe_app/modules/Home/controller/profile_controller.dart';
+import 'package:recipe_app/modules/Home/views/splash/splash_screen.dart';
 
 class ProfileScreenSmall extends GetView<ProfileController> {
   ProfileScreenSmall({super.key});
@@ -116,7 +117,9 @@ class ProfileScreenSmall extends GetView<ProfileController> {
             Padding(
               padding: const EdgeInsets.all(24),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.offAll(() => SplashScreen());
+                },
                 child: Text(
                   'Sign Out',
                   style: AppTextStyle.poppinsSmallRegular14(

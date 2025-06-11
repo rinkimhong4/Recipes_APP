@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
@@ -166,7 +167,7 @@ class _ItemDetailState extends State<ItemDetail> {
         if (widget.recipe.image != null)
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.network(widget.recipe.image!),
+            child: CachedNetworkImage(imageUrl: widget.recipe.image!),
           ),
         SizedBox(height: 16),
         Text(

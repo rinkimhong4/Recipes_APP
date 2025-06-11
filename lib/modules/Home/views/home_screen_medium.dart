@@ -118,7 +118,6 @@ class HomeScreenMedium extends GetView<HomeController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //
                       buildPopup();
                     },
                     child: Container(

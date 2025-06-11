@@ -27,7 +27,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       }
     });
 
-    //
     Future.delayed(Duration(milliseconds: 400), () {
       setState(() {
         _isLoading = false;
@@ -153,10 +152,6 @@ class NotificationItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(30),
-                    // border: Border.all(
-                    //   color: AppColors.secondaryColor,
-                    //   width: 1,
-                    // ),
                   ),
                   child: Image.asset(imageUrl, fit: BoxFit.cover),
                 ),

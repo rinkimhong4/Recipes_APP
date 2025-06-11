@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:recipe_app/modules/Home/views/profile/profile_controller.dart';
+import 'package:recipe_app/modules/Home/controller/profile_controller.dart';
 
 class ProfileBinding extends Bindings {
   @override

@@ -65,7 +65,6 @@ class ProfileController extends GetxController {
       }
     } catch (e) {
       debugPrint('Error saving profile: $e');
-      // Handle error appropriately
     } finally {
       isLoading.value = false;
     }

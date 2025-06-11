@@ -12,7 +12,6 @@ class RecipeFilterController extends GetxController {
   void setCategory(String category) => selectedCategory.value = category;
 
   void applyFilters() {
-    //  filter logic
     Get.back();
   }
 }
@@ -23,7 +22,7 @@ Future<dynamic> buildPopup() {
   return showModalBottomSheet(
     context: Get.context!,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
+    shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
     ),
     builder: (context) {

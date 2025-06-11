@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/config/function/responsive/main_responsive.dart';
 import 'package:recipe_app/modules/Home/binding/home_binding.dart';
 import 'package:recipe_app/modules/Home/views/notifications/notification_screen.dart';
-import 'package:recipe_app/modules/Home/views/profile/profile_binding.dart';
+import 'package:recipe_app/modules/Home/binding/profile_binding.dart';
 import 'package:recipe_app/modules/Home/views/profile/profile_screen_small.dart';
 import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_medium.dart';
 import 'package:recipe_app/modules/Home/views/SaveRecipe/save_recipe_screen_small.dart';
 import 'package:recipe_app/modules/Home/views/home_screen_small.dart';
-import 'package:recipe_app/modules/Home/views/home_screen_medium.dart'; // 👈 Add this
+import 'package:recipe_app/modules/Home/views/home_screen_medium.dart';
 import 'package:recipe_app/widget/bottom_navigation.dart';
 
 class MainNavigationScreen extends StatefulWidget {

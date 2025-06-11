@@ -113,14 +113,11 @@ class HomeScreenSmall extends GetView<HomeController> {
                       style: AppTextStyle.poppinsSmallRegular14(
                         color: Colors.black,
                       ),
-                      onChanged: (query) {
-                        //
-                      },
+                      onChanged: (query) {},
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      //
                       buildPopup();
                     },
                     child: Container(

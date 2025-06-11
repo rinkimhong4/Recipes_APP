@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
-import 'package:recipe_app/modules/Home/views/profile/profile_controller.dart';
+import 'package:recipe_app/modules/Home/controller/profile_controller.dart';
 import '../../models/about_us_model.dart';
 
 class ItemProfileScreen extends GetView<ProfileController> {
@@ -92,7 +92,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
       } else {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('No image selected')));
+        ).showSnackBar(SnackBar(content: Text('No image selected')));
       }
     } catch (e) {
       ScaffoldMessenger.of(
@@ -138,39 +138,42 @@ class _EditProfileContentState extends State<EditProfileContent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Obx(
-        () =>
-            controller.isLoading.value
-                ? const Center(child: CircularProgressIndicator())
-                : controller.errorMessage.value.isNotEmpty
-                ? Center(
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: AppTextStyle.poppinsSmallRegular14(
-                      color: AppColors.neutral,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                )
-                : SmartRefresher(
-                  controller: controller.refreshController.value,
-                  enablePullDown: true,
-                  header: WaterDropHeader(
-                    waterDropColor: AppColors.primaryColor,
-                  ),
-                  onRefresh: controller.onRefresh,
-                  child: SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width,
+      child: Container(
+        color: Colors.white,
+        child: Obx(
+          () =>
+              controller.isLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : controller.errorMessage.value.isNotEmpty
+                  ? Center(
+                    child: Text(
+                      controller.errorMessage.value,
+                      style: AppTextStyle.poppinsSmallRegular14(
+                        color: AppColors.neutral,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: _buildEditForm(),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                  : SmartRefresher(
+                    controller: controller.refreshController.value,
+                    enablePullDown: true,
+                    header: WaterDropHeader(
+                      waterDropColor: AppColors.primaryColor,
+                    ),
+                    onRefresh: controller.onRefresh,
+                    child: SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: _buildEditForm(),
+                        ),
                       ),
                     ),
                   ),
-                ),
+        ),
       ),
     );
   }
@@ -181,7 +184,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Center(
             child: Obx(() {
               return Stack(
@@ -200,9 +203,7 @@ class _EditProfileContentState extends State<EditProfileContent> {
                         backgroundImage:
                             controller.profileImage.value != null
                                 ? FileImage(controller.profileImage.value!)
-                                : const AssetImage(
-                                      'assets/images/hong_profile.png',
-                                    )
+                                : AssetImage('assets/images/hong_profile.png')
                                     as ImageProvider,
                       ),
                     ),
@@ -248,9 +249,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           : null,
             );
           }),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           _buildLabel('Phone Number'),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Obx(() {
             return TextFormField(
               inputFormatters: [
@@ -270,9 +271,9 @@ class _EditProfileContentState extends State<EditProfileContent> {
                           : null,
             );
           }),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           _buildLabel('Date of Birth'),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           GestureDetector(
             onTap: _pickDate,
             child: Obx(() {
@@ -481,29 +482,34 @@ class AboutUsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find<ProfileController>();
-    return Obx(
-      () =>
-          controller.isLoading.value
-              ? const Center(child: CircularProgressIndicator())
-              : controller.errorMessage.value.isNotEmpty
-              ? Center(
-                child: Text(
-                  controller.errorMessage.value,
-                  style: AppTextStyle.poppinsSmallRegular14(
-                    color: AppColors.neutral,
+    return Container(
+      color: Colors.white,
+      child: Obx(
+        () =>
+            controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(
+                    child: _buildBody(controller.aboutUsModels),
+                  ),
                 ),
-              )
-              : SmartRefresher(
-                controller: controller.refreshController.value,
-                enablePullDown: true,
-                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
-                onRefresh: controller.onRefresh,
-                child: SingleChildScrollView(
-                  child: _buildBody(controller.aboutUsModels),
-                ),
-              ),
+      ),
     );
   }
 
@@ -597,27 +603,32 @@ class ContactUsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find<ProfileController>();
-    return Obx(
-      () =>
-          controller.isLoading.value
-              ? const Center(child: CircularProgressIndicator())
-              : controller.errorMessage.value.isNotEmpty
-              ? Center(
-                child: Text(
-                  controller.errorMessage.value,
-                  style: AppTextStyle.poppinsSmallRegular14(
-                    color: AppColors.neutral,
+    return Container(
+      color: Colors.white,
+      child: Obx(
+        () =>
+            controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(child: _buildBody),
                 ),
-              )
-              : SmartRefresher(
-                controller: controller.refreshController.value,
-                enablePullDown: true,
-                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
-                onRefresh: controller.onRefresh,
-                child: SingleChildScrollView(child: _buildBody),
-              ),
+      ),
     );
   }
 
@@ -696,73 +707,78 @@ class TermOfUseContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find<ProfileController>();
-    return Obx(
-      () =>
-          controller.isLoading.value
-              ? const Center(child: CircularProgressIndicator())
-              : controller.errorMessage.value.isNotEmpty
-              ? Center(
-                child: Text(
-                  controller.errorMessage.value,
-                  style: AppTextStyle.poppinsSmallRegular14(
-                    color: AppColors.neutral,
+    return Container(
+      color: Colors.white,
+      child: Obx(
+        () =>
+            controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : controller.errorMessage.value.isNotEmpty
+                ? Center(
+                  child: Text(
+                    controller.errorMessage.value,
+                    style: AppTextStyle.poppinsSmallRegular14(
+                      color: AppColors.neutral,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-              : SmartRefresher(
-                controller: controller.refreshController.value,
-                enablePullDown: true,
-                header: WaterDropHeader(waterDropColor: AppColors.primaryColor),
-                onRefresh: controller.onRefresh,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSectionTitle("Terms of Use"),
-                      const SizedBox(height: 24),
-                      _buildParagraph(
-                        "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
-                      ),
-                      const SizedBox(height: 18),
-                      _buildSectionTitle("1. Use of Content"),
-                      const SizedBox(height: 6),
-                      _buildParagraph(
-                        "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
-                      ),
-                      const SizedBox(height: 18),
-                      _buildSectionTitle("2. User Conduct"),
-                      const SizedBox(height: 6),
-                      _buildParagraph(
-                        "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
-                      ),
-                      const SizedBox(height: 18),
-                      _buildSectionTitle("3. Privacy"),
-                      const SizedBox(height: 6),
-                      _buildParagraph(
-                        "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
-                      ),
-                      const SizedBox(height: 18),
-                      _buildSectionTitle("4. Disclaimer"),
-                      const SizedBox(height: 6),
-                      _buildParagraph(
-                        "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
-                      ),
-                      const SizedBox(height: 18),
-                      _buildSectionTitle("5. Changes to Terms"),
-                      const SizedBox(height: 6),
-                      _buildParagraph(
-                        "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
-                      ),
-                      const SizedBox(height: 24),
-                      _buildParagraph(
-                        "If you have any questions about these terms, please contact us through the Contact Us section.",
-                      ),
-                    ],
+                )
+                : SmartRefresher(
+                  controller: controller.refreshController.value,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: controller.onRefresh,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSectionTitle("Terms of Use"),
+                        const SizedBox(height: 24),
+                        _buildParagraph(
+                          "Welcome to Recipe App! By using our app, you agree to the following terms and conditions. Please read them carefully.",
+                        ),
+                        const SizedBox(height: 18),
+                        _buildSectionTitle("1. Use of Content"),
+                        const SizedBox(height: 6),
+                        _buildParagraph(
+                          "All recipes, images, and content provided in this app are for personal, non-commercial use only. You may not reproduce, distribute, or use any content for commercial purposes without permission.",
+                        ),
+                        const SizedBox(height: 18),
+                        _buildSectionTitle("2. User Conduct"),
+                        const SizedBox(height: 6),
+                        _buildParagraph(
+                          "You agree not to misuse the app, upload harmful content, or engage in any activity that may harm the app or its users.",
+                        ),
+                        const SizedBox(height: 18),
+                        _buildSectionTitle("3. Privacy"),
+                        const SizedBox(height: 6),
+                        _buildParagraph(
+                          "We respect your privacy. Please refer to our Privacy Policy for information on how we collect, use, and protect your data.",
+                        ),
+                        const SizedBox(height: 18),
+                        _buildSectionTitle("4. Disclaimer"),
+                        const SizedBox(height: 6),
+                        _buildParagraph(
+                          "The recipes and nutritional information provided are for reference only. Please consult a professional for dietary advice.",
+                        ),
+                        const SizedBox(height: 18),
+                        _buildSectionTitle("5. Changes to Terms"),
+                        const SizedBox(height: 6),
+                        _buildParagraph(
+                          "We may update these Terms of Use from time to time. Continued use of the app constitutes acceptance of the updated terms.",
+                        ),
+                        const SizedBox(height: 24),
+                        _buildParagraph(
+                          "If you have any questions about these terms, please contact us through the Contact Us section.",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+      ),
     );
   }
 

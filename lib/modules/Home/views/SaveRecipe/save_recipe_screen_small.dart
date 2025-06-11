@@ -71,21 +71,6 @@ class _SaveRecipeScreenSmallState extends State<SaveRecipeScreenSmall> {
                     enablePullDown: true,
                     header: WaterDropHeader(
                       waterDropColor: AppColors.primaryColor,
-                      // complete: Container(
-                      //   color: AppColors.primaryColor,
-                      //   child: Center(
-                      //     child: Text(
-                      //       'Refresh completed',
-                      //       style: AppTextStyle.poppinsSmallRegular14(
-                      //         color: Colors.white,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // idleIcon: Container(
-                      //   color: AppColors.primaryColor,
-                      //   child: Icon(Icons.arrow_downward, color: Colors.white),
-                      // ),
                     ),
                     onRefresh: controller.onRefresh,
                     child: ListView.builder(
