@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/config/theme/theme_style.dart';
 import 'package:recipe_app/modules/Home/views/notifications/new_recipe_notifications.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -15,6 +16,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   bool _isScrolled = false;
   bool _isLoading = true;
 
+  final RefreshController _refreshController = RefreshController();
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       }
     });
 
-    Future.delayed(Duration(milliseconds: 400), () {
+    Future.delayed(const Duration(milliseconds: 400), () {
       setState(() {
         _isLoading = false;
       });
@@ -37,10 +40,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _refreshController.dispose();
     super.dispose();
   }
 
   Color get appBarColor => _isScrolled ? AppColors.primaryColor : Colors.white;
+
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(seconds: 2));
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,25 +70,33 @@ class _NotificationScreenState extends State<NotificationScreen> {
         color: Colors.white,
         child:
             _isLoading
-                ? _buildShimmer
-                : ListView.builder(
-                  controller: _scrollController,
-                  itemCount: notificationList.length,
-                  itemBuilder: (context, index) {
-                    final notification = notificationList[index];
-                    return NotificationItem(
-                      imageUrl: notification['imageUrl'],
-                      title: notification['title'],
-                      subtitle: notification['subtitle'],
-                      onTap: () {},
-                    );
-                  },
+                ? _buildShimmer()
+                : SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    waterDropColor: AppColors.primaryColor,
+                  ),
+                  onRefresh: _onRefresh,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: notificationList.length,
+                    itemBuilder: (context, index) {
+                      final notification = notificationList[index];
+                      return NotificationItem(
+                        imageUrl: notification['imageUrl'] ?? '',
+                        title: notification['title'] ?? '',
+                        subtitle: notification['subtitle'] ?? '',
+                        onTap: () {},
+                      );
+                    },
+                  ),
                 ),
       ),
     );
   }
 
-  get _buildShimmer {
+  Widget _buildShimmer() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -90,8 +107,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                CircleAvatar(radius: 36),
-                SizedBox(width: 16.0),
+                const CircleAvatar(radius: 36),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,12 +143,12 @@ class NotificationItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const NotificationItem({
-    super.key,
+    Key? key,
     required this.imageUrl,
     required this.title,
     required this.subtitle,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +156,10 @@ class NotificationItem extends StatelessWidget {
       children: [
         Card(
           color: Colors.white,
-          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           elevation: 0,
           child: Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -155,7 +172,7 @@ class NotificationItem extends StatelessWidget {
                   ),
                   child: Image.asset(imageUrl, fit: BoxFit.cover),
                 ),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +183,7 @@ class NotificationItem extends StatelessWidget {
                           color: AppColors.neutral,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         subtitle,
                         style: AppTextStyle.poppinsSmallerRegular11(
@@ -180,7 +197,7 @@ class NotificationItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(height: 1, width: 350, color: Colors.grey.shade300),
       ],
     );
