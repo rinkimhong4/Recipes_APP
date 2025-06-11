@@ -1,7 +1,4 @@
-/**\*\***\***\*\*** ✨ Windsurf Command 🌟 **\*\***\***\*\***/
-/**\*\***\***\*\*** ✨ Windsurf Command 🌟 **\*\***\***\*\***/
-
-# recipe_app
+# Recipe App
 
 A Flutter project template for building recipe applications.
 
@@ -27,21 +24,17 @@ Follow these steps to set up and run the project:
 
 1. **Clone the repository:**
 
-   `bash
-git clone <repository-url>
+git clone https://github.com/rinkimhong4/Recipes_APP.git
 cd recipe_app
 cd Recipes_APP
-`
 
 2. **Install dependencies:**
-   `bash
+
 flutter pub get
-`
 
 3. **Run the app:**
-   `bash
+
 flutter run
-`
 
 > **Note:** Ensure you have [Flutter](https://flutter.dev/docs/get-started/install) installed on your machine.
 
@@ -56,6 +49,3 @@ If you're new to Flutter, these resources will help you get started:
 ---
 
 This project serves as a boilerplate for Flutter app development. Customize it to fit your recipe app requirements.
-
-/**\*\*\*** 44692e70-8504-4c8a-992c-fed78471ad37 **\*\*\***/
-/**\*\*\*** d52e5055-afd3-4a21-b9f3-f0531f3d64e7 **\*\*\***/
