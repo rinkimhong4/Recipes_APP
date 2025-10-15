@@ -143,12 +143,12 @@ class NotificationItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const NotificationItem({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.title,
     required this.subtitle,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
